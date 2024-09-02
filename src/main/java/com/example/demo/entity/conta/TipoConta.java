@@ -1,7 +1,5 @@
 package com.example.demo.entity.conta;
 
-import java.util.Objects;
-
 public class TipoConta {
     private int id;
     private String descricao;
