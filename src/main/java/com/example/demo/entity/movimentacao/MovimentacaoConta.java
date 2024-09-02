@@ -2,11 +2,7 @@ package com.example.demo.entity.movimentacao;
 
 import java.util.Date;
 
-import org.springframework.data.annotation.Id;
-import java.util.Objects;
-
 public class MovimentacaoConta {
-    @Id
     private int id;
     private double valor;
     private Date dataMovimentacao;
@@ -62,47 +58,6 @@ public class MovimentacaoConta {
 
     public void setContaId(int contaId) {
         this.contaId = contaId;
-    }
-
-    public MovimentacaoConta id(int id) {
-        setId(id);
-        return this;
-    }
-
-    public MovimentacaoConta valor(double valor) {
-        setValor(valor);
-        return this;
-    }
-
-    public MovimentacaoConta dataMovimentacao(Date dataMovimentacao) {
-        setDataMovimentacao(dataMovimentacao);
-        return this;
-    }
-
-    public MovimentacaoConta tipoMovimentacao(String tipoMovimentacao) {
-        setTipoMovimentacao(tipoMovimentacao);
-        return this;
-    }
-
-    public MovimentacaoConta contaId(int contaId) {
-        setContaId(contaId);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof MovimentacaoConta)) {
-            return false;
-        }
-        MovimentacaoConta movimentacaoConta = (MovimentacaoConta) o;
-        return id == movimentacaoConta.id && valor == movimentacaoConta.valor && Objects.equals(dataMovimentacao, movimentacaoConta.dataMovimentacao) && Objects.equals(tipoMovimentacao, movimentacaoConta.tipoMovimentacao) && contaId == movimentacaoConta.contaId;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, valor, dataMovimentacao, tipoMovimentacao, contaId);
     }
 
     @Override

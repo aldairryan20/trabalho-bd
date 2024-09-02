@@ -1,23 +1,19 @@
 package com.example.demo.entity;
 import java.util.Objects;
 
-import org.springframework.data.annotation.Id;
-
-public class Cliente {
-    @Id
-    private int id;
+public class Cliente extends Pessoa {
     private String fatorRisco;
     private float rendaMensal;
-    private int pessoaId;
 
-    public Cliente() {
-    }
-
-    public Cliente(int id, String fatorRisco, float rendaMensal, int pessoaId) {
+    public Cliente(int id, String fatorRisco, float rendaMensal) {
+        super();
         this.id = id;
         this.fatorRisco = fatorRisco;
         this.rendaMensal = rendaMensal;
-        this.pessoaId = pessoaId;
+    }
+
+    public Cliente() {
+        //TODO Auto-generated constructor stub
     }
 
     public int getId() {
@@ -44,48 +40,9 @@ public class Cliente {
         this.rendaMensal = rendaMensal;
     }
 
-    public int getPessoaId() {
-        return this.pessoaId;
-    }
-
-    public void setPessoaId(int pessoaId) {
-        this.pessoaId = pessoaId;
-    }
-
-    public Cliente id(int id) {
-        setId(id);
-        return this;
-    }
-
-    public Cliente fatorRisco(String fatorRisco) {
-        setFatorRisco(fatorRisco);
-        return this;
-    }
-
-    public Cliente rendaMensal(float rendaMensal) {
-        setRendaMensal(rendaMensal);
-        return this;
-    }
-
-    public Cliente pessoaId(int pessoaId) {
-        setPessoaId(pessoaId);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Cliente)) {
-            return false;
-        }
-        Cliente cliente = (Cliente) o;
-        return id == cliente.id && Objects.equals(fatorRisco, cliente.fatorRisco) && rendaMensal == cliente.rendaMensal && pessoaId == cliente.pessoaId;
-    }
-
     @Override
     public int hashCode() {
-        return Objects.hash(id, fatorRisco, rendaMensal, pessoaId);
+        return Objects.hash(id, fatorRisco, rendaMensal);
     }
 
     @Override
@@ -94,7 +51,6 @@ public class Cliente {
             " id='" + getId() + "'" +
             ", fatorRisco='" + getFatorRisco() + "'" +
             ", rendaMensal='" + getRendaMensal() + "'" +
-            ", pessoaId='" + getPessoaId() + "'" +
             "}";
     }
 }

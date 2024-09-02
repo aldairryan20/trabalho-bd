@@ -2,11 +2,7 @@ package com.example.demo.entity.reserva;
 
 import java.util.Date;
 
-import org.springframework.data.annotation.Id;
-import java.util.Objects;
-
 public class Reserva {
-    @Id
     private int id;
     private Date dataMovimentacao;
     private String tipoMovimentacao;
@@ -52,42 +48,6 @@ public class Reserva {
 
     public void setContaId(int contaId) {
         this.contaId = contaId;
-    }
-
-    public Reserva id(int id) {
-        setId(id);
-        return this;
-    }
-
-    public Reserva dataMovimentacao(Date dataMovimentacao) {
-        setDataMovimentacao(dataMovimentacao);
-        return this;
-    }
-
-    public Reserva tipoMovimentacao(String tipoMovimentacao) {
-        setTipoMovimentacao(tipoMovimentacao);
-        return this;
-    }
-
-    public Reserva contaId(int contaId) {
-        setContaId(contaId);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Reserva)) {
-            return false;
-        }
-        Reserva reserva = (Reserva) o;
-        return id == reserva.id && Objects.equals(dataMovimentacao, reserva.dataMovimentacao) && Objects.equals(tipoMovimentacao, reserva.tipoMovimentacao) && contaId == reserva.contaId;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, dataMovimentacao, tipoMovimentacao, contaId);
     }
 
     @Override

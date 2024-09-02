@@ -1,15 +1,10 @@
 package com.example.demo.entity.conta;
 
-import org.springframework.data.annotation.Id;
 import java.util.Objects;
 
 public class TipoConta {
-    @Id
     private int id;
     private String descricao;
-
-    public TipoConta() {
-    }
 
     public TipoConta(int id, String descricao) {
         this.id = id;
