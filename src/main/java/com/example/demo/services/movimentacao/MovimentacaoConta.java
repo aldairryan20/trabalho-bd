@@ -1,4 +1,4 @@
-package com.example.demo.entity.movimentacao;
+package com.example.demo.services.movimentacao;
 
 import java.util.Date;
 
@@ -8,9 +8,6 @@ public class MovimentacaoConta {
     private Date dataMovimentacao;
     private String tipoMovimentacao;
     private int contaId;
-
-    public MovimentacaoConta() {
-    }
 
     public MovimentacaoConta(int id, double valor, Date dataMovimentacao, String tipoMovimentacao, int contaId) {
         this.id = id;
