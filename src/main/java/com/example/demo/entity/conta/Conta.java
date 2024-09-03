@@ -10,12 +10,8 @@ public class Conta extends Cliente {
     private double limiteNegativo;
     private int tipoContaId;
 
-    public Conta(int id, double saldo, double limiteNegativo, int tipoContaId) {
-        super();
-        this.id = id;
-        this.saldo = saldo;
-        this.limiteNegativo = limiteNegativo;
-        this.tipoContaId = tipoContaId;
+    public Conta() {
+        //TODO Auto-generated constructor stub
     }
 
     public int getId() {
