@@ -5,12 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
+import org.apache.logging.log4j.LogManager;
+
 import com.example.demo.config.SpringJdbcConfig;
 import com.example.demo.entity.conta.Conta;
 
 import java.sql.SQLException;
 
 public class ContaDAO {
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ContaDAO.class);
     public HashMap<Integer, Conta> findAll() {
         var sql = new String("SELECT * FROM conta");
         var contas = new HashMap<Integer, Conta>();
@@ -44,7 +47,7 @@ public class ContaDAO {
                 conta.setTipoContaId(rs.getInt("tipoContaId"));
             }
         } catch (SQLException e) {
-            // TODO: handle exception
+            logger.error("Not founded", e);
         }
         return conta;
     }

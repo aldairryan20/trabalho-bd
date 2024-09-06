@@ -1,20 +1,26 @@
 package com.example.demo.services;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-
+import com.example.demo.config.SpringJdbcConfig;
 import com.example.demo.dao.ContaDAO;
 import com.example.demo.entity.conta.Conta;
-import com.example.demo.repository.Repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
-public class Service {
+import org.springframework.stereotype.Service;
+
+@Service
+public class ContaService {
     ContaDAO contaDAO;
-    Repository repository;
-    public JdbcTemplate jdbcTemplate;
-    Conta result = jdbcTemplate.queryForObject(
-    "SELECT COUNT(*) FROM CONTA", Conta.class);
+    public ContaService() {
+        var contaDAO = new ContaDAO();
+        this.contaDAO = contaDAO;
+        System.out.println("service created");
+    }
     public Conta findById(int id) {
         return contaDAO.findById(id);
     }
@@ -45,5 +51,15 @@ public class Service {
 
         }
         return jsonResult;
+    }
+
+    public void executeQuery(String sql) {
+        try (Connection conn = SpringJdbcConfig.getConnection()) {
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            System.out.println("Conexão estabelecida com sucesso!"+pstm.getConnection());
+            pstm.execute();
+        } catch(SQLException e){
+            System.out.println("Erro");
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.example.demo.rest;
 
-import com.example.demo.services.Service;
+import com.example.demo.services.ContaService;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class ClienteController {
-    Service service;
+    ContaService service;
 
     @RequestMapping(value = "/contas/{id}", method = RequestMethod.GET)
     public String getById(@PathVariable int id) {

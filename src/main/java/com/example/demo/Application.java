@@ -1,15 +1,25 @@
 package com.example.demo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.example.demo.services.ContaService;
+
+import jakarta.annotation.PostConstruct;
 
 @SpringBootApplication
 public class Application {
+	@Autowired
+	ContaService service;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
+	@Bean
 	public CommandLineRunner createTables() {
 		return args -> {
 			var sql0 = "CREATE TABLE tipo_conta("+
@@ -102,7 +112,14 @@ public class Application {
 				"FOREIGN KEY (cartao_transacao_id) REFERENCES cartao_transacao(id),"+
 				"data_compra DATETIME"+
 			");";
-			
 		};
+	}
+	@PostConstruct
+	void executar() {
+		var sql0 = "CREATE TABLE tipo_conta("+
+				"id INT,"+
+				"descricao VARCHAR(45)"+
+			");";
+		service.executeQuery(sql0);
 	}
 }
