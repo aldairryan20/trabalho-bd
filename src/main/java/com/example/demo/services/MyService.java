@@ -9,14 +9,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ContaService {
+public class MyService {
+    Logger logger = LogManager.getLogger(getClass());
     ContaDAO contaDAO;
-    public ContaService() {
+    public MyService() {
         var contaDAO = new ContaDAO();
         this.contaDAO = contaDAO;
         System.out.println("service created");
@@ -57,9 +61,28 @@ public class ContaService {
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement pstm = conn.prepareStatement(sql);
             System.out.println("Conexão estabelecida com sucesso!"+pstm.getConnection());
-            pstm.execute();
+            pstm.executeUpdate();
+            logger.info(sql);
         } catch(SQLException e){
-            System.out.println("Erro");
+            logger.error("Erro em: " + getClass(), e);
         }
     }
+    public String getTables(String sql) {
+        StringBuilder result = new StringBuilder();
+        try (Connection conn = SpringJdbcConfig.getConnection()) {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            logger.info(sql);
+            while (rs.next()) {
+                int columnCount = rs.getMetaData().getColumnCount();
+                for (int i = 1; i <= columnCount; i++) {
+                    result.append(rs.getString(i)).append(" ");
+                }
+                result.append("\n");
+            }
+        } catch(SQLException e) {
+            logger.error("Erro em: " + getClass(), e);
+        }
+        return result.toString();
+    }    
 }

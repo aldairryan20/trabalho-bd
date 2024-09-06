@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.entity.pessoa;
 
 public class Pessoa {
     public int id;

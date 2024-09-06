@@ -1,0 +1,6 @@
+GRUPO 1:
+tipo_conta 
+pessoa 
+categoria_cartao 
+bandeira_cartao 
+corretor

@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class ContaDAO {
     private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ContaDAO.class);
     public HashMap<Integer, Conta> findAll() {
-        var sql = new String("SELECT * FROM conta");
+        var sql = "SELECT * FROM conta";
         var contas = new HashMap<Integer, Conta>();
 
         try(Connection conn = SpringJdbcConfig.getConnection()) {

@@ -1,4 +1,4 @@
-package com.example.demo.services.movimentacao;
+package com.example.demo.entity.movimentacao;
 
 import java.util.Date;
 

@@ -11,13 +11,6 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(int id, Date dataMovimentacao, String tipoMovimentacao, int contaId) {
-        this.id = id;
-        this.dataMovimentacao = dataMovimentacao;
-        this.tipoMovimentacao = tipoMovimentacao;
-        this.contaId = contaId;
-    }
-
     public int getId() {
         return this.id;
     }

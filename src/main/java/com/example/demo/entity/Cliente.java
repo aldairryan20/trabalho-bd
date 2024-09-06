@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 import java.util.Objects;
 
+import com.example.demo.entity.pessoa.Pessoa;
+
 public class Cliente extends Pessoa {
     private String fatorRisco;
     private float rendaMensal;
