@@ -5,14 +5,7 @@ public class Pessoa {
     private String nome;
     private String cpf;
 
-    public Pessoa(int id, String nome, String cpf) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-    }
-
     public Pessoa() {
-        //TODO Auto-generated constructor stub
     }
 
     public int getId() {

@@ -1,5 +1,4 @@
 package com.example.demo.entity.reserva;
-
 import java.util.Date;
 
 public class Reserva {

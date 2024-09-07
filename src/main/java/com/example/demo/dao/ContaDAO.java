@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.example.demo.config.SpringJdbcConfig;
 import com.example.demo.entity.conta.Conta;
@@ -13,9 +14,9 @@ import com.example.demo.entity.conta.Conta;
 import java.sql.SQLException;
 
 public class ContaDAO {
-    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ContaDAO.class);
+    private Logger logger = LogManager.getLogger(ContaDAO.class);
     public HashMap<Integer, Conta> findAll() {
-        var sql = "SELECT * FROM conta";
+        var sql = "SELECT * FROM conta;";
         var contas = new HashMap<Integer, Conta>();
 
         try(Connection conn = SpringJdbcConfig.getConnection()) {
@@ -29,7 +30,7 @@ public class ContaDAO {
                 contas.put(conta.getId(), conta);
             }
         } catch (SQLException e) {
-            // TODO: handle exception
+            logger.error("Error at: "+ getClass().getName(), e.getMessage());
         }
         return contas;
     }
@@ -44,10 +45,10 @@ public class ContaDAO {
             while(rs.next()) {
                 conta.setSaldo(rs.getDouble("saldo"));
                 conta.setLimiteNegativo(rs.getDouble("limite_negativo"));
-                conta.setTipoContaId(rs.getInt("tipoContaId"));
+                conta.setTipoContaId(rs.getInt("tipo_conta_id"));
             }
         } catch (SQLException e) {
-            logger.error("Not founded", e);
+            logger.error("conta not founded - "+ id, e.getMessage());
         }
         return conta;
     }

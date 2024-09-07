@@ -1,21 +1,12 @@
 package com.example.demo.entity;
-import java.util.Objects;
 
 import com.example.demo.entity.pessoa.Pessoa;
 
 public class Cliente extends Pessoa {
     private String fatorRisco;
-    private float rendaMensal;
-
-    public Cliente(int id, String fatorRisco, float rendaMensal) {
-        super();
-        this.id = id;
-        this.fatorRisco = fatorRisco;
-        this.rendaMensal = rendaMensal;
-    }
+    private double rendaMensal;
 
     public Cliente() {
-        //TODO Auto-generated constructor stub
     }
 
     public int getId() {
@@ -34,17 +25,12 @@ public class Cliente extends Pessoa {
         this.fatorRisco = fatorRisco;
     }
 
-    public float getRendaMensal() {
+    public double getRendaMensal() {
         return this.rendaMensal;
     }
 
     public void setRendaMensal(float rendaMensal) {
         this.rendaMensal = rendaMensal;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, fatorRisco, rendaMensal);
     }
 
     @Override

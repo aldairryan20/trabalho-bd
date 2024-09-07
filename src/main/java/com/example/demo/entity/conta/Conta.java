@@ -1,17 +1,12 @@
 package com.example.demo.entity.conta;
-
-import org.springframework.data.relational.core.mapping.Table;
-
 import com.example.demo.entity.Cliente;
 
-@Table(name = "CONTA")
 public class Conta extends Cliente {
     private double saldo;
     private double limiteNegativo;
     private int tipoContaId;
 
     public Conta() {
-        //TODO Auto-generated constructor stub
     }
 
     public int getId() {

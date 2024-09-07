@@ -1,5 +1,4 @@
 package com.example.demo.entity.movimentacao;
-
 import java.util.Date;
 
 public class MovimentacaoConta {
