@@ -25,13 +25,6 @@ public class MyService {
         this.contaDAO = contaDAO;
         System.out.println("service created");
     }
-    public Conta findById(int id) {
-        return contaDAO.findById(id);
-    }
-
-    public HashMap<Integer, Conta> findAll() {
-        return contaDAO.findAll();
-    }
 
     public String findAllContasAsJson() {
         HashMap<Integer, Conta> contas = contaDAO.findAll();
@@ -52,7 +45,7 @@ public class MyService {
         try{
             jsonResult = objectMapper.writeValueAsString(conta);
         } catch(Exception e){
-
+            logger.error("\nErro em: " + getClass().getName(), e);
         }
         return jsonResult;
     }
@@ -64,7 +57,7 @@ public class MyService {
             pstm.executeUpdate();
             logger.info(sql);
         } catch(SQLException e){
-            logger.error("Erro em: " + getClass(), e);
+            logger.error("\nErro em: " + getClass().getName(), e);
         }
     }
     public String getTables(String sql) {
@@ -81,7 +74,7 @@ public class MyService {
                 result.append("\n");
             }
         } catch(SQLException e) {
-            logger.error("Erro em: " + getClass(), e);
+            logger.error("Erro em: " + getClass().getName(), e);
         }
         return result.toString();
     }    

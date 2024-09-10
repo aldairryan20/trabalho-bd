@@ -7,14 +7,16 @@ import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import com.example.demo.config.SpringJdbcConfig;
 import com.example.demo.entity.conta.Conta;
 
 import java.sql.SQLException;
 
+@Component
 public class ContaDAO {
-    private Logger logger = LogManager.getLogger(ContaDAO.class);
+    private Logger logger = LogManager.getLogger(getClass());
     public HashMap<Integer, Conta> findAll() {
         var sql = "SELECT * FROM conta;";
         var contas = new HashMap<Integer, Conta>();

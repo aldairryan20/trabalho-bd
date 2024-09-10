@@ -1,7 +1,7 @@
 package com.example.demo.entity.pessoa;
 
 public class Pessoa {
-    public int id;
+    private int id;
     private String nome;
     private String cpf;
 

@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import com.example.demo.entity.pessoa.Pessoa;
 
 public class Cliente extends Pessoa {
+    private int id;
     private String fatorRisco;
     private double rendaMensal;
 

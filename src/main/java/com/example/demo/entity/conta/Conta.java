@@ -1,10 +1,10 @@
 package com.example.demo.entity.conta;
-import com.example.demo.entity.Cliente;
 
-public class Conta extends Cliente {
+public class Conta {
+    private int id;
     private double saldo;
     private double limiteNegativo;
-    private int tipoContaId;
+    private double tipoContaId;
 
     public Conta() {
     }
@@ -16,7 +16,6 @@ public class Conta extends Cliente {
     public void setId(int id) {
         this.id = id;
     }
-
     public double getSaldo() {
         return this.saldo;
     }
@@ -33,19 +32,18 @@ public class Conta extends Cliente {
         this.limiteNegativo = limiteNegativo;
     }
 
-    public int getTipoContaId() {
+    public double getTipoContaId() {
         return this.tipoContaId;
     }
 
-    public void setTipoContaId(int tipoContaId) {
+    public void setTipoContaId(double tipoContaId) {
         this.tipoContaId = tipoContaId;
     }
 
     @Override
     public String toString() {
         return "{" +
-            " id='" + getId() + "'" +
-            ", saldo='" + getSaldo() + "'" +
+            " saldo='" + getSaldo() + "'" +
             ", limiteNegativo='" + getLimiteNegativo() + "'" +
             ", tipoContaId='" + getTipoContaId() + "'" +
             "}";
