@@ -185,8 +185,6 @@ public class Application {
 			for(String sql:sqls){
 				service.executeQuery(sql);
 			}
-			var sql = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';";
-			System.out.println(service.getTables(sql));
 		};
 	}
 }

@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,14 +20,14 @@ import org.springframework.stereotype.Service;
 public class MyService {
     Logger logger = LogManager.getLogger(getClass());
     ContaDAO contaDAO;
+    
     public MyService() {
         var contaDAO = new ContaDAO();
         this.contaDAO = contaDAO;
-        System.out.println("service created");
     }
 
     public String findAllContasAsJson() {
-        HashMap<Integer, Conta> contas = contaDAO.findAll();
+        ArrayList<Conta> contas = contaDAO.findAll();
         var objectMapper = new ObjectMapper();
         var jsonResult = "";
         try{
@@ -53,13 +53,15 @@ public class MyService {
     public void executeQuery(String sql) {
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement pstm = conn.prepareStatement(sql);
-            System.out.println("Conexão estabelecida com sucesso!"+pstm.getConnection());
+            logger.log(logger.getLevel(), "Connection stablished: "+pstm.getConnection());
             pstm.executeUpdate();
             logger.info(sql);
+            conn.close();
         } catch(SQLException e){
             logger.error("\nErro em: " + getClass().getName(), e);
         }
     }
+
     public String getTables(String sql) {
         StringBuilder result = new StringBuilder();
         try (Connection conn = SpringJdbcConfig.getConnection()) {

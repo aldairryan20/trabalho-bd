@@ -4,7 +4,7 @@ public class Conta {
     private int id;
     private double saldo;
     private double limiteNegativo;
-    private double tipoContaId;
+    private int tipoContaId; // 1: poupança, 2: corrente
 
     public Conta() {
     }
@@ -32,11 +32,11 @@ public class Conta {
         this.limiteNegativo = limiteNegativo;
     }
 
-    public double getTipoContaId() {
+    public int getTipoContaId() {
         return this.tipoContaId;
     }
 
-    public void setTipoContaId(double tipoContaId) {
+    public void setTipoContaId(int tipoContaId) {
         this.tipoContaId = tipoContaId;
     }
 

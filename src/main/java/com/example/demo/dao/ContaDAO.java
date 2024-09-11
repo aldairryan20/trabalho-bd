@@ -3,6 +3,7 @@ package com.example.demo.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
@@ -17,9 +18,13 @@ import java.sql.SQLException;
 @Component
 public class ContaDAO {
     private Logger logger = LogManager.getLogger(getClass());
-    public HashMap<Integer, Conta> findAll() {
+
+    public ContaDAO() {
+    }
+
+    public ArrayList<Conta> findAll() {
         var sql = "SELECT * FROM conta;";
-        var contas = new HashMap<Integer, Conta>();
+        var contas = new ArrayList<Conta>();
 
         try(Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -28,8 +33,9 @@ public class ContaDAO {
                 var conta = new Conta();
                 conta.setSaldo(rs.getDouble("saldo"));
                 conta.setLimiteNegativo(rs.getDouble("limite_negativo"));
-                conta.setTipoContaId(rs.getInt("tipoContaId"));
-                contas.put(conta.getId(), conta);
+                conta.setTipoContaId(rs.getInt("tipo_conta_id"));
+                contas.add(conta);
+                System.out.println("ContaDAO.findAll");
             }
         } catch (SQLException e) {
             logger.error("Error at: "+ getClass().getName(), e.getMessage());
@@ -53,5 +59,21 @@ public class ContaDAO {
             logger.error("conta not founded - "+ id +"\n", e.getMessage());
         }
         return conta;
+    }
+
+    public void insertConta(int id, double saldo, double limiteNegativo, int tipoContaId) {
+        var sql = "INSERT INTO conta(id, saldo, limite_negativo, tipo_conta_id) VALUES (?, ?, ?, ?)";
+    
+        try (Connection conn = SpringJdbcConfig.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            stmt.setDouble(2, saldo);
+            stmt.setDouble(3, limiteNegativo);
+            stmt.setInt(4, tipoContaId);
+            stmt.executeUpdate();
+            conn.close();
+        } catch (SQLException e) {
+            logger.error("Erro", e.getMessage());
+        }
     }
 }
