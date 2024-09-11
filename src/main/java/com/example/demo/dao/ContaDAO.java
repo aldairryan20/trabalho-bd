@@ -50,7 +50,7 @@ public class ContaDAO {
                 conta.setTipoContaId(rs.getInt("tipo_conta_id"));
             }
         } catch (SQLException e) {
-            logger.error("conta not founded - "+ id, e.getMessage());
+            logger.error("conta not founded - "+ id +"\n", e.getMessage());
         }
         return conta;
     }

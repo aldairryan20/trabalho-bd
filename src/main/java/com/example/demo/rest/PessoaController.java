@@ -5,6 +5,8 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,15 +24,8 @@ public class PessoaController {
     MyService service;
 
     @RequestMapping(value = "/pessoas", method = RequestMethod.POST)
-    public ResponseEntity<String> insertPessoa(String cpf, int id, String nome) {
-        var pessoa = new Pessoa();
-        pessoa.setCpf(cpf);
-        pessoa.setId(id);
-        pessoa.setNome(nome);
-
-        var sql = "INSERT AT pessoa(cpf, id, nome) "+
-        "VALUES("+cpf+", "+id+", "+nome+");";
-        service.executeQuery(sql);
+    public ResponseEntity<String> insertPessoa(@RequestBody Pessoa pessoa) {
+        pessoaDAO.insertPessoa(pessoa.getCpf(), pessoa.getId(), pessoa.getNome());
         var responseBody = "created";
         return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }
@@ -38,7 +33,7 @@ public class PessoaController {
     @RequestMapping(value = "/pessoas", method = RequestMethod.GET)
     public ResponseEntity<String> findAllPessoasAsJson() {
         
-        HashMap<Integer, Pessoa> pessoas = pessoaDAO.findAll();
+        HashMap<Integer, String> pessoas = pessoaDAO.findAll();
         var objectMapper = new ObjectMapper();
         var jsonResult = "";
         try{
@@ -47,5 +42,14 @@ public class PessoaController {
             System.out.println(e.getMessage());
         }
         return new ResponseEntity<String>(jsonResult, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/pessoas/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Pessoa> findPessoaById(@PathVariable int id) {
+        var pessoa = pessoaDAO.findPessoaById(id);
+        if (pessoa == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(pessoa, HttpStatus.FOUND);
     }
 }

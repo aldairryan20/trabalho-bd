@@ -1,7 +1,0 @@
-bandeira_cartao 
-categoria_cartao
-tipo_boleto
-corretor
-tipo_conta
-pessoa
-cliente
