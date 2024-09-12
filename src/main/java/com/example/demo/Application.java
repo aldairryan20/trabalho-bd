@@ -7,22 +7,26 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 
-import com.example.demo.service.MyService;
+import com.example.demo.entity.conta.Conta;
+import com.example.demo.entity.pessoa.Pessoa;
+import com.example.demo.service.BdService;
 
 @SpringBootApplication
 public class Application {
 	@Autowired
-	MyService service;
+	BdService service;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
 	@Bean
+	@Order(1)
 	public CommandLineRunner createTables() {
 		var sqls = new ArrayList<String>();
-		return args -> {
+		return (args) -> {
 
 			sqls.add("CREATE TABLE IF NOT EXISTS bandeira_cartao("+
 				"id SERIAL PRIMARY KEY,"+
@@ -185,6 +189,24 @@ public class Application {
 			for(String sql:sqls){
 				service.executeQuery(sql);
 			}
+		};
+	}
+
+	@Bean
+	@Order(2)
+	public CommandLineRunner createConta() {
+		return (args) -> {
+			//var pessoa = new Pessoa();
+			//var conta = new Conta();
+
+			//service.save(pessoa);
+			//service.save(pessoa, conta);
+
+			//var contaRec = service.getConta(1);
+			//service.transfer(conta, contaRec);
+//			
+			//service.delete(conta.getId());
+			//service.delete(contaRec.getId());
 		};
 	}
 }

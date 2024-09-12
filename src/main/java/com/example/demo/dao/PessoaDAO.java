@@ -8,15 +8,17 @@ import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.config.SpringJdbcConfig;
 import com.example.demo.entity.pessoa.Pessoa;
-import com.example.demo.service.MyService;
+import com.example.demo.service.BdService;
 
 @Component
 public class PessoaDAO {
-    MyService service;
+    @Lazy
+    BdService service;
     private Logger logger = LogManager.getLogger(getClass());
 
     public HashMap<Integer, String> findAll() {
@@ -46,7 +48,7 @@ public class PessoaDAO {
     
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
-            //stmt.setInt(1, id);
+            stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 pessoa.setCpf(rs.getString("cpf"));
@@ -61,7 +63,7 @@ public class PessoaDAO {
     
 
     public void insertPessoa(String cpf, int id, String nome) {
-        var sql = "INSERT INTO pessoa (cpf, id, nome) VALUES (?, ?, ?)";
+        var sql = "INSERT INTO pessoa(cpf, id, nome) VALUES(?, ?, ?)";
     
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);

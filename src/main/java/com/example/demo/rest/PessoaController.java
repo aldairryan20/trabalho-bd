@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dao.PessoaDAO;
 import com.example.demo.entity.pessoa.Pessoa;
-import com.example.demo.service.MyService;
+import com.example.demo.service.BdService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class PessoaController {
     @Autowired
     PessoaDAO pessoaDAO;
-    MyService service;
+    BdService service;
 
     @RequestMapping(value = "/pessoas", method = RequestMethod.POST)
     public ResponseEntity<String> insertPessoa(@RequestBody Pessoa pessoa) {

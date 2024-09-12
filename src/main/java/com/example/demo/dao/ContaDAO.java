@@ -4,23 +4,23 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.config.SpringJdbcConfig;
 import com.example.demo.entity.conta.Conta;
+import com.example.demo.service.BdService;
 
 import java.sql.SQLException;
 
 @Component
 public class ContaDAO {
+    @Lazy
+    BdService service;
     private Logger logger = LogManager.getLogger(getClass());
-
-    public ContaDAO() {
-    }
 
     public ArrayList<Conta> findAll() {
         var sql = "SELECT * FROM conta;";
@@ -35,7 +35,6 @@ public class ContaDAO {
                 conta.setLimiteNegativo(rs.getDouble("limite_negativo"));
                 conta.setTipoContaId(rs.getInt("tipo_conta_id"));
                 contas.add(conta);
-                System.out.println("ContaDAO.findAll");
             }
         } catch (SQLException e) {
             logger.error("Error at: "+ getClass().getName(), e.getMessage());
@@ -49,6 +48,7 @@ public class ContaDAO {
 
         try(Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {
                 conta.setSaldo(rs.getDouble("saldo"));
@@ -73,7 +73,7 @@ public class ContaDAO {
             stmt.executeUpdate();
             conn.close();
         } catch (SQLException e) {
-            logger.error("Erro", e.getMessage());
+            logger.error("Error: ", e.getMessage());
         }
     }
 }
