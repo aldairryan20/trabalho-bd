@@ -1,45 +1,26 @@
+/*
 package com.example.demo.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 
 import com.example.demo.config.SpringJdbcConfig;
 import com.example.demo.entity.conta.Conta;
-import com.example.demo.service.BdService;
+import com.example.demo.interfaces.CrudInterfaceImpl;
 
 import java.sql.SQLException;
 
 @Component
-public class ContaDAO {
-    @Lazy
-    BdService service;
-    private Logger logger = LogManager.getLogger(getClass());
-
-    public ArrayList<Conta> findAll() {
-        var sql = "SELECT * FROM conta;";
-        var contas = new ArrayList<Conta>();
-
-        try(Connection conn = SpringJdbcConfig.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-            while(rs.next()) {
-                var conta = new Conta();
-                conta.setSaldo(rs.getDouble("saldo"));
-                conta.setLimiteNegativo(rs.getDouble("limite_negativo"));
-                conta.setTipoContaId(rs.getInt("tipo_conta_id"));
-                contas.add(conta);
-            }
-        } catch (SQLException e) {
-            logger.error("Error at: "+ getClass().getName(), e.getMessage());
-        }
-        return contas;
+public class ContaDAO extends CrudInterfaceImpl<Conta> {
+    private final Logger logger = LogManager.getLogger(getClass());
+    
+    public ContaDAO(String tableName) {
+        super(tableName);
+        //TODO Auto-generated constructor stub
     }
 
     public Conta findById(int id) {
@@ -56,7 +37,8 @@ public class ContaDAO {
                 conta.setTipoContaId(rs.getInt("tipo_conta_id"));
             }
         } catch (SQLException e) {
-            logger.error("conta not founded - "+ id +"\n", e.getMessage());
+            logger.error("Error at "+getClass().getName()+"\nMethod = findById"+"\n", e.getMessage());
+            e.printStackTrace();
         }
         return conta;
     }
@@ -73,7 +55,10 @@ public class ContaDAO {
             stmt.executeUpdate();
             conn.close();
         } catch (SQLException e) {
-            logger.error("Error: ", e.getMessage());
+            logger.error("Error at "+getClass().getName()+"\nMethod = insertConta"+"\n", e.getMessage());
+            e.printStackTrace();
         }
     }
+    
 }
+*/

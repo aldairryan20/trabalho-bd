@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.config.SpringJdbcConfig;
-import com.example.demo.dao.ContaDAO;
 import com.example.demo.dao.PessoaDAO;
 
 import java.sql.Connection;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BdService {
-    ContaDAO contaDAO;
+    //ContaDAO contaDAO;
     PessoaDAO pessoaDAO;
     Logger logger = LogManager.getLogger(getClass());
     
@@ -22,18 +21,22 @@ public class BdService {
     }
 
     public void executeQuery(String sql) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+        
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement pstm = conn.prepareStatement(sql);
-            logger.log(logger.getLevel(), "Connection stablished: "+ pstm.getConnection());
+            // logger.log(logger.getLevel(), "Connection stablished: "+ pstm.getConnection());
             pstm.executeUpdate();
-            logger.info(sql);
+            // logger.info(sql);
             conn.close();
         } catch(SQLException e){
-            logger.error("\nErro em: " + getClass().getName(), e);
+            logger.error("Error at "+getClass().getName()+"\nMethod = "+methodName+"\n", e.getMessage());
         }
     }
 
     public String getTables(String sql) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         var result = new StringBuilder();
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             var statement = conn.createStatement();
@@ -47,7 +50,7 @@ public class BdService {
                 result.append("\n");
             }
         } catch(SQLException e) {
-            logger.error("Error at: " + getClass().getName(), e);
+            logger.error("Error at "+getClass().getName()+"\nMethod = "+methodName+"\n", e.getMessage());
         }
         return result.toString();
     }

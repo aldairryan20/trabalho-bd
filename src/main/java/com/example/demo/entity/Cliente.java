@@ -1,8 +1,6 @@
 package com.example.demo.entity;
 
-import com.example.demo.entity.pessoa.Pessoa;
-
-public class Cliente extends Pessoa {
+public class Cliente {
     private int id;
     private String fatorRisco;
     private double rendaMensal;
@@ -30,7 +28,7 @@ public class Cliente extends Pessoa {
         return this.rendaMensal;
     }
 
-    public void setRendaMensal(float rendaMensal) {
+    public void setRendaMensal(double rendaMensal) {
         this.rendaMensal = rendaMensal;
     }
 

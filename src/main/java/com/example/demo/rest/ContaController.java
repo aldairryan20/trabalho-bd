@@ -1,6 +1,5 @@
+/*
 package com.example.demo.rest;
-
-import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,29 +32,35 @@ public class ContaController {
         return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/contas", method=RequestMethod.GET)
-    public String findAllContasAsJson() {
-        ArrayList<Conta> contas = contaDAO.findAll();
-        var objectMapper = new ObjectMapper();
-        var jsonResult = "";
-        try{
-            jsonResult = objectMapper.writeValueAsString(contas);
-        } catch(Exception e){
+    //@SuppressWarnings("unchecked")
+    //@RequestMapping(value = "/contas", method=RequestMethod.GET)
+    //public String findAllContasAsJson() {
+        //String methodName = new Throwable().getStackTrace()[0].getMethodName();
 
-        }
-        return jsonResult;
-    }
+        //ArrayList<Conta> contas = contaDAO.findAll();
+        //var objectMapper = new ObjectMapper();
+        //var jsonResult = "";
+        //try{
+            //jsonResult = objectMapper.writeValueAsString(contas);
+        //} catch(Exception e){
+            //logger.error("Error at "+getClass().getName()+"\nMethod = "+methodName+"\n", e.getMessage());
+        //}
+        //return jsonResult;
+    //}
 
     @RequestMapping(value = "/contas/{id}", method = RequestMethod.GET)
     public String findContaByIdAsJson(int id) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+        
         var conta = contaDAO.findById(id);
         var objectMapper = new ObjectMapper();
         var jsonResult = "";
         try{
             jsonResult = objectMapper.writeValueAsString(conta);
         } catch(Exception e){
-            logger.error("\nErro em: " + getClass().getName(), e);
+            logger.error("Error at "+getClass().getName()+"\nMethod = "+methodName+"\n", e.getMessage());
         }
         return jsonResult;
     }
 }
+*/

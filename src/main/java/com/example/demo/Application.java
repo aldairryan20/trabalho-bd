@@ -9,8 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 
-import com.example.demo.entity.conta.Conta;
-import com.example.demo.entity.pessoa.Pessoa;
 import com.example.demo.service.BdService;
 
 @SpringBootApplication
@@ -53,7 +51,7 @@ public class Application {
 				"nome VARCHAR(45),"+
 				"cpf VARCHAR(45)"+
 			");");
-			// ================================================
+			
 			sqls.add("CREATE TABLE IF NOT EXISTS tipo_conta("+
 				"id SERIAL PRIMARY KEY,"+
 				"descricao VARCHAR(45)"+
@@ -197,6 +195,7 @@ public class Application {
 	public CommandLineRunner createConta() {
 		return (args) -> {
 			//var pessoa = new Pessoa();
+			//var tipoConta = new TipoConta();
 			//var conta = new Conta();
 
 			//service.save(pessoa);
