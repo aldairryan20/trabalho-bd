@@ -3,8 +3,10 @@ package com.example.demo.entity.conta;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.example.demo.interfaces.EntityFactory;
+import org.springframework.stereotype.Component;
 
+import com.example.demo.interfaces.EntityFactory;
+@Component
 public class ContaFactory implements EntityFactory<Conta> {
     @SuppressWarnings("unused")
     @Override

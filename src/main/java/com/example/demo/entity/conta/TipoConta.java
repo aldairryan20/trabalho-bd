@@ -3,10 +3,9 @@ package com.example.demo.entity.conta;
 public class TipoConta {
     private int id;
     private String descricao;
+    
+    public TipoConta(){
 
-    public TipoConta(int id, String descricao) {
-        this.id = id;
-        this.descricao = descricao;
     }
 
     public int getId() {

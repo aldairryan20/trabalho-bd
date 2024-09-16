@@ -9,12 +9,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 
+import com.example.demo.dao.ContaDAO;
+import com.example.demo.dao.TipoContaDAO;
 import com.example.demo.service.BdService;
 
 @SpringBootApplication
 public class Application {
 	@Autowired
 	BdService service;
+	@Autowired
+	ContaDAO contaDAO;
+	@Autowired
+	TipoContaDAO tipoContaDAO;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

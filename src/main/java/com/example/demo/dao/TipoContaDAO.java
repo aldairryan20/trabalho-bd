@@ -12,47 +12,45 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.config.SpringJdbcConfig;
-import com.example.demo.entity.pessoa.Pessoa;
-import com.example.demo.entity.pessoa.PessoaFactory;
+import com.example.demo.entity.conta.TipoConta;
+import com.example.demo.entity.conta.TipoContaFactory;
 import com.example.demo.interfaces.CrudInterfaceImpl;
 
 @Component
-public class PessoaDAO extends CrudInterfaceImpl<Pessoa> {
-    private final PessoaFactory pessoaFactory;
+public class TipoContaDAO extends CrudInterfaceImpl<TipoConta> {
+    private final TipoContaFactory tipoContaFactory;
     private final Logger logger = LogManager.getLogger(getClass());
 
-    public PessoaDAO(PessoaFactory pessoaFactory) {
-        super("pessoa");
-        this.pessoaFactory = pessoaFactory;
+    public TipoContaDAO(TipoContaFactory tipoContaFactory) {
+        super("tipo_conta");
+        this.tipoContaFactory = tipoContaFactory;
     }
 
     @Override
-    public Pessoa createElementFromResultSet(ResultSet rs) throws SQLException {
-        return pessoaFactory.createFromResultSet(rs);
+    public TipoConta createElementFromResultSet(ResultSet rs) throws SQLException {
+        return tipoContaFactory.createFromResultSet(rs);
     }
 
-    public void insertPessoa(String cpf, int id, String nome) {
-        var sql = "INSERT INTO pessoa (id, nome, cpf) VALUES (?, ?, ?)";
+    public void insertTipoConta(int id, String descricao) {
+        var sql = "INSERT INTO tipo_conta (id, descricao) VALUES (?, ?)";
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
-            stmt.setString(2, nome);
-            stmt.setString(3, cpf);
+            stmt.setString(2, descricao);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public ResponseEntity<String> update(String nome, String cpf, int id) {
+    public ResponseEntity<String> update(String descricao, int id) {
         var sql = "UPDATE Pessoa SET cpf = ?, nome = ? WHERE id = ?";
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, nome);
-            stmt.setString(2, cpf);
-            stmt.setInt(3, id);
+            stmt.setString(1, descricao);
+            stmt.setInt(2, id);
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
                 return ResponseEntity.ok("updated");
