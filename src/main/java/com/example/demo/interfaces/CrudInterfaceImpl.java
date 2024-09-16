@@ -38,7 +38,6 @@ public class CrudInterfaceImpl<T> implements CrudInterface<T> {
     }
 
     public T createElementFromResultSet(ResultSet rs) throws SQLException {
-        // Implementação específica da subclasse
         return null;
     }
 
@@ -62,14 +61,12 @@ public class CrudInterfaceImpl<T> implements CrudInterface<T> {
     }
 
     @Override
-    public T update() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
-    }
-
-    @Override
-    public void delete(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    public void delete(int id) throws SQLException {
+        String sql = "DELETE FROM "+ tableName +" WHERE id = ?";
+        try (Connection conn = SpringJdbcConfig.getConnection()) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        }
     }
 }
