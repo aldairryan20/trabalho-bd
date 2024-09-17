@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -19,7 +17,6 @@ import com.example.demo.interfaces.CrudInterfaceImpl;
 @Component
 public class PessoaDAO extends CrudInterfaceImpl<Pessoa> {
     private final PessoaFactory pessoaFactory;
-    private final Logger logger = LogManager.getLogger(getClass());
 
     public PessoaDAO(PessoaFactory pessoaFactory) {
         super("pessoa");

@@ -34,7 +34,7 @@ public class ContaController {
         if (conta == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(conta, HttpStatus.FOUND);
+        return new ResponseEntity<>(conta, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/contas", method = RequestMethod.POST)

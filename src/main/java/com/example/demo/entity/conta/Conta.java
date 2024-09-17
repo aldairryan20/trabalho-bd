@@ -4,7 +4,7 @@ public class Conta {
     private int id;
     private double saldo;
     private double limiteNegativo;
-    private int tipoContaId; // 1: poupança, 2: corrente
+    private int tipoContaId;
 
     public Conta() {
     }

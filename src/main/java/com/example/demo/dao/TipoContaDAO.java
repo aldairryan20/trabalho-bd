@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -19,7 +17,6 @@ import com.example.demo.interfaces.CrudInterfaceImpl;
 @Component
 public class TipoContaDAO extends CrudInterfaceImpl<TipoConta> {
     private final TipoContaFactory tipoContaFactory;
-    private final Logger logger = LogManager.getLogger(getClass());
 
     public TipoContaDAO(TipoContaFactory tipoContaFactory) {
         super("tipo_conta");
@@ -32,7 +29,7 @@ public class TipoContaDAO extends CrudInterfaceImpl<TipoConta> {
     }
 
     public void insertTipoConta(int id, String descricao) {
-        var sql = "INSERT INTO tipo_conta (id, descricao) VALUES (?, ?)";
+        var sql = "INSERT INTO tipo_conta(id, descricao) VALUES (?, ?)";
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);

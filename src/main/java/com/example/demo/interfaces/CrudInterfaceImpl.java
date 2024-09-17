@@ -21,7 +21,6 @@ public class CrudInterfaceImpl<T> implements CrudInterface<T> {
 
     @Override
     public List<T> findAll() {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
         List<T> elements = new ArrayList<>();
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
@@ -32,7 +31,7 @@ public class CrudInterfaceImpl<T> implements CrudInterface<T> {
                 elements.add(element);
             }
         } catch (SQLException e) {
-            logger.error("Error at " + getClass().getName() + "\nMethod = " + methodName + "\n", e);
+            e.printStackTrace();
         }
         return elements;
     }
@@ -43,7 +42,6 @@ public class CrudInterfaceImpl<T> implements CrudInterface<T> {
 
     @Override
     public T findById(int id) {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
         var sql = "SELECT * FROM "+ tableName +" WHERE id = ?;";
         T element = null;
         try (Connection conn = SpringJdbcConfig.getConnection()) {
@@ -54,7 +52,6 @@ public class CrudInterfaceImpl<T> implements CrudInterface<T> {
                 element = createElementFromResultSet(rs);
             }
         } catch (SQLException e) {
-            logger.error("Error at " + getClass().getName() + "\nMethod = " + methodName + "\n", e.getMessage());
             e.printStackTrace();
         }
         return element;
