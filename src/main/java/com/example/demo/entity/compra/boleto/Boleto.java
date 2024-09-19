@@ -1,5 +1,7 @@
 package com.example.demo.entity.compra.boleto;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 public class Boleto {
     private int id;
@@ -9,9 +11,78 @@ public class Boleto {
     private String codigoBarras;
     private int tipoBoletoId;
     private int faturaCartaoId;
+    private boolean isPago;
 
     public Boleto() {
+        this.isPago = false;
     }
+
+    public static Boleto gerarBoleto(double valor) {
+        var boleto = new Boleto();
+        Calendar calendar = Calendar.getInstance();
+        var codigoBarras = generateEAN13();
+        var id = gerarId();
+        var tipoBoleto = new TipoBoleto();
+
+        tipoBoleto.setId(id);
+        tipoBoleto.setDescricao("descricao");
+
+        boleto.setCodigoBarras(codigoBarras);
+        boleto.setDataGeracao(calendar.getTime());
+
+        calendar.add(Calendar.MONTH, 1);
+        boleto.setDataVencimento(calendar.getTime());
+
+        boleto.setFaturaCartaoId(id);
+        boleto.setId(id);
+        boleto.setTipoBoletoId(id);
+
+        boleto.setValor(valor);
+        return boleto;
+    }
+
+    public static int gerarId() {
+        Random id = new Random();
+        return id.nextInt(Integer.MAX_VALUE);
+    }
+
+    public static void pagarBoleto(Boleto boleto, String codigoBarras) {
+        if (boleto.isPago()) {
+            System.out.println("Este boleto já foi pago.");
+            return;
+        }
+
+        if (boleto.getCodigoBarras().equals(codigoBarras)) {
+            boleto.setPago(true);
+            System.out.println("Boleto pago com sucesso.");
+        } else {
+            System.out.println("Código de barras inválido.");
+        }
+    }
+
+    public static String generateEAN13() {
+        Random random = new Random();
+        StringBuilder codigoBarras = new StringBuilder();
+
+        for (int i = 0; i < 12; i++) {
+            codigoBarras.append(random.nextInt(10));
+        }
+
+        int checkDigit = calculateCheckDigit(codigoBarras.toString());
+        codigoBarras.append(checkDigit);
+
+        return codigoBarras.toString();
+    }
+
+    public static int calculateCheckDigit(String codigo) {
+        int sum = 0;
+        for (int i = 0; i < codigo.length(); i++) {
+            int digit = Character.getNumericValue(codigo.charAt(i));
+            sum += (i % 2 == 0) ? digit : digit * 3;
+        }
+        return (10 - (sum % 10)) % 10;
+    }
+
 
     public int getId() {
         return this.id;
@@ -67,6 +138,13 @@ public class Boleto {
 
     public void setFaturaCartaoId(int faturaCartaoId) {
         this.faturaCartaoId = faturaCartaoId;
+    }
+    public boolean isPago() {
+        return this.isPago;
+    }
+
+    public void setPago(boolean isPago) {
+        this.isPago = isPago;
     }
 
     @Override

@@ -1,10 +1,13 @@
 package com.example.demo.entity.conta;
+import com.example.demo.entity.cartao.CartaoCredito;
 
 public class Conta {
     private int id;
     private double saldo;
     private double limiteNegativo;
     private int tipoContaId;
+
+    private CartaoCredito cartao;
 
     public Conta() {
     }
@@ -38,6 +41,14 @@ public class Conta {
 
     public void setTipoContaId(int tipoContaId) {
         this.tipoContaId = tipoContaId;
+    }
+
+    public CartaoCredito getCartao() {
+        return this.cartao;
+    }
+
+    public void setCartao(CartaoCredito cartao) {
+        this.cartao = cartao;
     }
 
     @Override

@@ -2,10 +2,14 @@ package com.example.demo.service;
 
 import com.example.demo.config.SpringJdbcConfig;
 import com.example.demo.dao.PessoaDAO;
+import com.example.demo.dao.ContaDAO;
+import com.example.demo.entity.compra.boleto.Boleto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,12 +17,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BdService {
-    //ContaDAO contaDAO;
+    ContaDAO contaDAO;
     PessoaDAO pessoaDAO;
     Logger logger = LogManager.getLogger(getClass());
-    
-    public BdService() {
-    }
 
     public void executeQuery(String sql) {
         String methodName = new Throwable().getStackTrace()[0].getMethodName();
@@ -33,4 +34,6 @@ public class BdService {
             logger.error("Error at "+getClass().getName()+"\nMethod = "+methodName+"\n", e.getMessage());
         }
     }
+
+    
 }
