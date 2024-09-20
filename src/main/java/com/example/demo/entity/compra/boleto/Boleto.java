@@ -1,4 +1,5 @@
 package com.example.demo.entity.compra.boleto;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -11,10 +12,13 @@ public class Boleto {
     private String codigoBarras;
     private int tipoBoletoId;
     private int faturaCartaoId;
+    
     private boolean isPago;
+    private static ArrayList<Integer> ids;
 
     public Boleto() {
-        this.isPago = false;
+        this.setPago(false);
+        ids = new ArrayList<>();
     }
 
     public static Boleto gerarBoleto(double valor) {
@@ -25,6 +29,8 @@ public class Boleto {
         var tipoBoleto = new TipoBoleto();
 
         tipoBoleto.setId(id);
+        ids.add(id);
+        
         tipoBoleto.setDescricao("descricao");
 
         boleto.setCodigoBarras(codigoBarras);
@@ -42,8 +48,11 @@ public class Boleto {
     }
 
     public static int gerarId() {
-        Random id = new Random();
-        return id.nextInt(Integer.MAX_VALUE);
+        var id = new Random().nextInt(Integer.MAX_VALUE);
+        if (ids.contains(id)){
+            return gerarId();
+        }
+        return id;
     }
 
     public static void pagarBoleto(Boleto boleto, String codigoBarras) {

@@ -55,7 +55,7 @@ public class ContaDAO extends CrudInterfaceImpl<Conta> {
     }
 
     public ResponseEntity<String> update(int id, double saldo, double limiteNegativo, int tipoContaId) {
-        var sql = "UPDATE Pessoa SET saldo = ?, limite_negativo = ?, tipo_conta = ? WHERE id = ?";
+        var sql = "UPDATE conta SET saldo = ?, limite_negativo = ?, tipo_conta = ? WHERE id = ?";
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);

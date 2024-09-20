@@ -3,13 +3,10 @@ package com.example.demo.service;
 import com.example.demo.config.SpringJdbcConfig;
 import com.example.demo.dao.PessoaDAO;
 import com.example.demo.dao.ContaDAO;
-import com.example.demo.entity.compra.boleto.Boleto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
