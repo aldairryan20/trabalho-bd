@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import com.example.demo.dao.BoletoDAO;
+
 public class Boleto {
     private int id;
     private double valor;
@@ -14,11 +16,9 @@ public class Boleto {
     private int faturaCartaoId;
     
     private boolean isPago;
-    private static ArrayList<Integer> ids;
 
     public Boleto() {
         this.setPago(false);
-        ids = new ArrayList<>();
     }
 
     public static Boleto gerarBoleto(double valor) {
@@ -29,6 +29,7 @@ public class Boleto {
         var tipoBoleto = new TipoBoleto();
 
         tipoBoleto.setId(id);
+        var ids = BoletoDAO.ids;
         ids.add(id);
         
         tipoBoleto.setDescricao("descricao");
@@ -46,9 +47,9 @@ public class Boleto {
         boleto.setValor(valor);
         return boleto;
     }
-
     public static int gerarId() {
         var id = new Random().nextInt(Integer.MAX_VALUE);
+        var ids = BoletoDAO.ids;
         if (ids.contains(id)){
             return gerarId();
         }

@@ -14,11 +14,13 @@ import com.example.demo.config.SpringJdbcConfig;
 import com.example.demo.entity.compra.boleto.Boleto;
 import com.example.demo.entity.compra.boleto.BoletoFactory;
 import com.example.demo.interfaces.CrudInterfaceImpl;
+import java.util.ArrayList;
 
 @Component
 public class BoletoDAO extends CrudInterfaceImpl<Boleto> {
     TipoBoletoDAO tipoBoletoDAO;
     BoletoFactory factory;
+    public static ArrayList<Integer> ids = new ArrayList<>();
     
     public BoletoDAO(BoletoFactory factory, TipoBoletoDAO tipoBoletoDAO) {
         super("boleto");

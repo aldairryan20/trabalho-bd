@@ -1,5 +1,9 @@
 package com.example.demo.entity.cartao;
 import java.util.Date;
+import java.util.Random;
+import java.util.Calendar;
+
+import com.example.demo.dao.CartaoCreditoDAO;
 
 public class CartaoCredito {
     private int id;
@@ -8,7 +12,19 @@ public class CartaoCredito {
     private int catCartaoId;
     private double limiteCredito;
 
-    public CartaoCredito() {
+    private CartaoCredito gerarCartao() {
+        var ids = CartaoCreditoDAO.ids;
+        var cartao = new CartaoCredito();
+        cartao.setId(generateRandomId());
+
+        var calendar = Calendar.getInstance();
+        cartao.setDataFechamento(calendar.getTime());
+        return cartao;
+    }
+
+    private static int generateRandomId() {
+        var random = new Random().nextInt(Integer.MAX_VALUE);
+        return random;
     }
 
     public int getId() {
@@ -23,8 +39,8 @@ public class CartaoCredito {
         return this.dataFechamento;
     }
 
-    public void setDataFechamento(Date dataFechamento) {
-        this.dataFechamento = dataFechamento;
+    public void setDataFechamento(Date date) {
+        this.dataFechamento = date;
     }
 
     public int getContaId() {
@@ -50,6 +66,7 @@ public class CartaoCredito {
     public void setLimiteCredito(double limiteCredito) {
         this.limiteCredito = limiteCredito;
     }
+
 
     @Override
     public String toString() {

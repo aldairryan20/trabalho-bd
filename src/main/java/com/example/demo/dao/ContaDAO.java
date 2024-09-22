@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.config.SpringJdbcConfig;
+import com.example.demo.entity.cartao.CartaoCredito;
 import com.example.demo.entity.conta.Conta;
 import com.example.demo.entity.conta.ContaFactory;
 import com.example.demo.entity.conta.TipoConta;
@@ -23,10 +24,11 @@ public class ContaDAO extends CrudInterfaceImpl<Conta> {
     private TipoContaDAO tipoContaDAO;
     private final ContaFactory contaFactory;
 
-    public ContaDAO(ContaFactory contaFactory, TipoContaDAO tipoContaDAO) {
+    public ContaDAO(ContaFactory factory) {
         super("conta");
-        this.contaFactory = contaFactory;
+        this.contaFactory = factory;
     }
+
 
     @Override
     public Conta createElementFromResultSet(ResultSet rs) throws SQLException {
