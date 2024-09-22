@@ -1,10 +1,12 @@
-package com.example.demo.entity;
+package com.example.demo.entity.pessoa.cliente;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.example.demo.interfaces.EntityFactory;
+import org.springframework.stereotype.Component;
 
+import com.example.demo.interfaces.EntityFactory;
+@Component
 public class ClienteFactory implements EntityFactory<Cliente> {
     @Override
     public Cliente createFromResultSet(ResultSet rs) throws SQLException {

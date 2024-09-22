@@ -9,8 +9,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 
+import com.example.demo.dao.ClienteDAO;
 import com.example.demo.dao.ContaDAO;
+import com.example.demo.dao.PessoaDAO;
 import com.example.demo.dao.TipoContaDAO;
+import com.example.demo.entity.pessoa.PessoaFactory;
+import com.example.demo.entity.pessoa.cliente.Cliente;
+import com.example.demo.entity.pessoa.cliente.ClienteFactory;
 import com.example.demo.service.BdService;
 
 @SpringBootApplication
@@ -18,9 +23,17 @@ public class Application {
 	@Autowired
 	BdService service;
 	@Autowired
+	PessoaDAO pessoaDAO;
+	@Autowired
+	ClienteDAO clienteDAO;
+	@Autowired
 	ContaDAO contaDAO;
 	@Autowired
 	TipoContaDAO tipoContaDAO;
+	@Autowired
+	PessoaFactory pessoaFactory;
+	@Autowired
+	ClienteFactory clienteFactory;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -198,9 +211,23 @@ public class Application {
 
 	@Bean
 	@Order(2)
-	public CommandLineRunner createConta() {
+	public CommandLineRunner criandoCliente() {
 		return (args) -> {
-			//var pessoa = new Pessoa();
+			
+			//var pessoa = pessoaFactory.createFromResultSet()
+			var cliente = new Cliente();
+		};
+	}
+	@Bean
+	@Order(3)
+	public CommandLineRunner comprandoComCartao() {
+		return (args) -> {
+			int id = 0;
+
+			//var clienteDB = clienteDAO.findById(id);
+
+			//clienteDB.comprar(1000.00);
+
 			//var tipoConta = new TipoConta();
 			//var conta = new Conta();
 

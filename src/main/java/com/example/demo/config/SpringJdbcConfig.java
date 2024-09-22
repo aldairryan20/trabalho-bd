@@ -5,12 +5,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
-@ComponentScan("com.example.demo.config")
 public class SpringJdbcConfig {
     private static String DRIVER = "org.postgresql.Driver";
     private static String URL = "jdbc:postgresql://localhost:5432/database";

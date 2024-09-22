@@ -1,7 +1,8 @@
 package com.example.demo.entity.cartao;
-import java.util.Date;
-import java.util.Random;
+
+import java.sql.Date;
 import java.util.Calendar;
+import java.util.Random;
 
 import com.example.demo.dao.CartaoCreditoDAO;
 
@@ -12,18 +13,34 @@ public class CartaoCredito {
     private int catCartaoId;
     private double limiteCredito;
 
-    private CartaoCredito gerarCartao() {
-        var ids = CartaoCreditoDAO.ids;
+    private static CategoriaCartao categoria;
+
+    public static CartaoCredito gerarCartao(int contaId, double limite) {
         var cartao = new CartaoCredito();
-        cartao.setId(generateRandomId());
+        cartao.setId(gerarId());
 
         var calendar = Calendar.getInstance();
-        cartao.setDataFechamento(calendar.getTime());
+        calendar.setTime(new java.util.Date());
+        calendar.add(Calendar.MONTH, 1);
+        cartao.setDataFechamento(new Date(calendar.getTimeInMillis()));
+
+        cartao.setContaId(contaId);
+
+        categoria = new CategoriaCartao();
+        categoria.setId(cartao.getId());
+        categoria.setDescricao("descricao");
+        cartao.setCatCartaoId(categoria.getId());
+        
+        cartao.setLimiteCredito(limite);
         return cartao;
     }
 
-    private static int generateRandomId() {
+    private static int gerarId() {
         var random = new Random().nextInt(Integer.MAX_VALUE);
+        var ids = CartaoCreditoDAO.ids;
+        if (ids.contains(random)) {
+            return gerarId();
+        }
         return random;
     }
 
@@ -64,9 +81,12 @@ public class CartaoCredito {
     }
 
     public void setLimiteCredito(double limiteCredito) {
+        if (limiteCredito < 0) {
+            System.out.println("Compra recusada - Limite atingido");
+            System.exit(-1);
+        }
         this.limiteCredito = limiteCredito;
     }
-
 
     @Override
     public String toString() {

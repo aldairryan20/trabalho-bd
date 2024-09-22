@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public class CartaoCreditoDAO extends CrudInterfaceImpl<CartaoCredito> {
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
-            stmt.setDate(2, new java.sql.Date(dataFechamento.getTime()));
+            stmt.setDate(2, new Date(dataFechamento.getTime()));
             stmt.setInt(3, contaId);
             stmt.setInt(4, catCartaoId);
             stmt.setDouble(5, limiteCredito);
@@ -53,7 +53,7 @@ public class CartaoCreditoDAO extends CrudInterfaceImpl<CartaoCredito> {
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, new java.sql.Date(dataFechamento.getTime()));
+            stmt.setDate(1, new Date(dataFechamento.getTime()));
             stmt.setInt(2, contaId);
             stmt.setInt(3, catCartaoId);
             stmt.setDouble(4, limiteCredito);

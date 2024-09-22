@@ -1,5 +1,4 @@
 package com.example.demo.entity.compra.boleto;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;

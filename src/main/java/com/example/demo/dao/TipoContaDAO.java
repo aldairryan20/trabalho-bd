@@ -16,16 +16,16 @@ import com.example.demo.interfaces.CrudInterfaceImpl;
 
 @Component
 public class TipoContaDAO extends CrudInterfaceImpl<TipoConta> {
-    private final TipoContaFactory tipoContaFactory;
+    private final TipoContaFactory factory;
 
-    public TipoContaDAO(TipoContaFactory tipoContaFactory) {
+    public TipoContaDAO(TipoContaFactory factory) {
         super("tipo_conta");
-        this.tipoContaFactory = tipoContaFactory;
+        this.factory = factory;
     }
 
     @Override
     public TipoConta createElementFromResultSet(ResultSet rs) throws SQLException {
-        return tipoContaFactory.createFromResultSet(rs);
+        return factory.createFromResultSet(rs);
     }
 
     public void insertTipoConta(int id, String descricao) {

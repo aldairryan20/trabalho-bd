@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.config.SpringJdbcConfig;
-import com.example.demo.entity.cartao.CartaoCredito;
 import com.example.demo.entity.conta.Conta;
 import com.example.demo.entity.conta.ContaFactory;
 import com.example.demo.entity.conta.TipoConta;
