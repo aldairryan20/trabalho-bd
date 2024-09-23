@@ -4,16 +4,33 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.demo.dao.BoletoDAO;
 import com.example.demo.entity.cartao.CartaoCredito;
 import com.example.demo.entity.compra.Pagamento;
 import com.example.demo.entity.compra.fatura.FaturaCartao;
+import com.example.demo.entity.conta.Conta;
 import com.example.demo.entity.pessoa.Pessoa;
 
 public class Cliente extends Pessoa {
     private String fatorRisco;
     private double rendaMensal;
     private CartaoCredito cartao;
-    private List<FaturaCartao> faturas = new ArrayList<>();
+    private Conta conta;
+    private ArrayList<FaturaCartao> faturas;
+
+    public void loadFaturas() {
+        faturas = new ArrayList<FaturaCartao>();
+        System.out.println("faturas disponiveis");
+    }
+
+    public Conta getConta() {
+        return this.conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+    
 
     public CartaoCredito getCartao() {
         return this.cartao;
@@ -43,8 +60,20 @@ public class Cliente extends Pessoa {
         return faturas;
     }
 
-    public void setFaturas(List<FaturaCartao> faturas) {
+    public void setFaturas(ArrayList<FaturaCartao> faturas) {
         this.faturas = faturas;
+    }
+
+    public Pagamento pagarBoleto(BoletoDAO boletoDAO, String codigo_barras) {
+        var boleto = boletoDAO.getBoleto(codigo_barras);
+        var pagamento = new Pagamento();
+
+        pagamento.setValorTotal(boleto.getValor());
+        pagamento.setDataPagamento(new Date(System.currentTimeMillis()));
+        pagamento.setFaturaCartaoId(getFaturaAtual().getId());
+        cartao.setLimiteCredito(cartao.getLimiteCredito() - boleto.getValor());
+
+        return pagamento;
     }
 
     public Pagamento comprar(double valor) {

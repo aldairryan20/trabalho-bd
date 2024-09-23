@@ -48,7 +48,7 @@ public class CartaoCreditoDAO extends CrudInterfaceImpl<CartaoCredito> {
     }
 
     public ResponseEntity<String> updateCartaoCredito(int id, Date dataFechamento, int contaId, int catCartaoId, double limiteCredito, int bandeiraId) {
-        var sql = "UPDATE cartao_credito SET data_fechamento = ?, conta_id = ?, cat_cartao_id = ?, limite_credito = ?, bandeira_id = ? WHERE id = ?";
+        var sql = "UPDATE cartao_credito SET dt_fechamento = ?, conta_id = ?, categoria_cartao_id = ?, limite_credito = ?, bandeira_id = ? WHERE id = ?";
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);

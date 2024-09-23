@@ -18,7 +18,7 @@ public class CartaoCreditoFactory implements EntityFactory<CartaoCredito> {
         int id = rs.getInt("id");
         Date dataFechamento = rs.getDate("dt_fechamento");
         int contaId = rs.getInt("conta_id");
-        int catCartaoId = rs.getInt("cat_cartao_id");
+        int catCartaoId = rs.getInt("categoria_cartao_id");
         double limiteCredito = rs.getDouble("limite_credito");
 
         cartaoCredito.setId(id);

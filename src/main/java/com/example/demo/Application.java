@@ -282,19 +282,20 @@ public class Application {
 			conta.setSaldo(0);
 
 			cartao.setContaId(conta.getId());
+			cliente.setCartao(cartao);
 
 			var tipoConta = new TipoConta();
 			tipoConta.setDescricao("descricao");
 			tipoConta.setId(conta.getId());
 			conta.setTipoContaId(tipoConta.getId());
 
-			clienteDAO.delete(cliente.getId());		// PK - cartao - pessoa
-			cartaoCreditoDAO.delete(cartao.getId());	// PK - conta - bandeira - catCartao.
-			contaDAO.delete(conta.getId());		// PK - tipoConta
-			tipoContaDAO.delete(tipoConta.getId());
-			bandeiraCartaoDAO.delete(bandeira.getId());
-			categoriaCartaoDAO.delete(catCartao.getId());
-			pessoaDAO.delete(pessoa.getId());
+			// clienteDAO.delete(cliente.getId());		// PK - cartao - pessoa
+			// cartaoCreditoDAO.delete(cartao.getId());	// PK - conta - bandeira - catCartao.
+			// contaDAO.delete(conta.getId());		// PK - tipoConta
+			// tipoContaDAO.delete(tipoConta.getId());
+			// bandeiraCartaoDAO.delete(bandeira.getId());
+			// categoriaCartaoDAO.delete(catCartao.getId());
+			// pessoaDAO.delete(pessoa.getId());
 
 			// 1) pessoa
 			pessoaDAO.insertPessoa(pessoa.getCpf(), pessoa.getId(), pessoa.getNome());
@@ -315,9 +316,24 @@ public class Application {
 			cartaoCreditoDAO.insertCartaoCredito(cartao.getId(), cartao.getDataFechamento(), cartao.getContaId(), cartao.getCatCartaoId(), cartao.getLimiteCredito(), cartao.getBandeira().getId());
 			
 			// 6) cliente
-			clienteDAO.insertCliente(0, cliente.getFatorRisco(), cliente.getRendaMensal(), 0);
-			var pessoaDB = contaDAO.findById(0);
-			System.out.println(pessoaDB);
+			clienteDAO.insertCliente(0, cliente.getFatorRisco(), cliente.getRendaMensal(), cliente.getCartao().getId());
+			
+		};
+	}
+	@Bean
+	@Order(3)
+	public CommandLineRunner comprandoComCartao() {
+		return args -> {
+			var cliente = clienteDAO.findById(0);
+			cliente.loadFaturas();
+			var cartao = cartaoCreditoDAO.findById(0);
+
+			System.out.println(cliente);
+
+			cliente.setCartao(cartao);
+			cliente.comprar(5123);
+			cliente.comprar(5123);
+			
 		};
 	}
 

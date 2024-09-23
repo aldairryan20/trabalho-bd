@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
@@ -15,7 +14,6 @@ public class SpringJdbcConfig {
     private static String USERNAME = "postgres";
     private static String PASSWORD = "mysecretpassword";
 
-    @Bean
     public DriverManagerDataSource mysqlDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(DRIVER);
