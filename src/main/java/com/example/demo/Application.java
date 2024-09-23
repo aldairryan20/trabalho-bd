@@ -64,48 +64,48 @@ public class Application {
 		return (args) -> {
 
 			sqls.add("CREATE TABLE IF NOT EXISTS bandeira_cartao("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"descricao VARCHAR(45)"+
 			");");
 
 			sqls.add("CREATE TABLE IF NOT EXISTS categoria_cartao("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"descricao VARCHAR(45)"+
 			");");
 
 			sqls.add("CREATE TABLE IF NOT EXISTS tipo_boleto("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"descricao VARCHAR(45)"+
 			");");
 
 			sqls.add("CREATE TABLE IF NOT EXISTS corretor("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"nome VARCHAR(45)"+
 			");");
 
 			sqls.add("CREATE TABLE IF NOT EXISTS pessoa("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"nome VARCHAR(45),"+
 				"cpf VARCHAR(45)"+
 			");");
 			
 			sqls.add("CREATE TABLE IF NOT EXISTS tipo_conta("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"descricao VARCHAR(45)"+
 			");");
 			sqls.add("CREATE TABLE IF NOT EXISTS conta("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"saldo DOUBLE PRECISION,"+
 				"limite_negativo DOUBLE PRECISION,"+
-				"tipo_conta_id SERIAL,"+
+				"tipo_conta_id INT,"+
 				"FOREIGN KEY (tipo_conta_id) REFERENCES tipo_conta(id)"+
 			");");
 
 			sqls.add("CREATE TABLE IF NOT EXISTS cartao_credito("+
-				"id SERIAL PRIMARY KEY,"+
-				"conta_id SERIAL,"+
-				"bandeira_id SERIAL,"+
-				"categoria_cartao_id SERIAL,"+
+				"id INT PRIMARY KEY,"+
+				"conta_id INT,"+
+				"bandeira_id INT,"+
+				"categoria_cartao_id INT,"+
 				"dt_fechamento VARCHAR(45),"+
 				"limite_credito DOUBLE PRECISION,"+
 				"FOREIGN KEY (conta_id) REFERENCES conta(id),"+
@@ -114,113 +114,113 @@ public class Application {
 			");");
 
 			sqls.add("CREATE TABLE IF NOT EXISTS cartao_transacao("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"numero_cartao VARCHAR(20),"+
 				"cvc VARCHAR(5),"+
 				"tipo_cartao VARCHAR(7) CHECK (tipo_cartao IN ('fisico', 'virtual')),"+
 				"nome_cartao VARCHAR(255),"+
 				"tipo_transacao VARCHAR(7) CHECK (tipo_transacao IN ('credito', 'debito')),"+
 				"is_internacional BOOLEAN,"+
-				"cartao_credito_id SERIAL,"+
-				"bandeira_cartao_id SERIAL,"+
+				"cartao_credito_id INT,"+
+				"bandeira_cartao_id INT,"+
 				"FOREIGN KEY (cartao_credito_id) REFERENCES cartao_credito(id),"+
 				"FOREIGN KEY (bandeira_cartao_id) REFERENCES bandeira_cartao(id)"+
 			");");
 
 			sqls.add("CREATE TABLE IF NOT EXISTS fatura_cartao("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"mes_ref VARCHAR(9),"+
 				"ano_ref VARCHAR(4),"+
 				"valor DOUBLE PRECISION,"+
 				"dt_pagamento TIMESTAMP,"+
-				"cartao_credito_id SERIAL,"+
+				"cartao_credito_id INT,"+
 				"FOREIGN KEY (cartao_credito_id) REFERENCES cartao_credito(id)"+
 			");");
 
 			sqls.add("CREATE TABLE IF NOT EXISTS boleto("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"valor DOUBLE PRECISION,"+
 				"dt_vencimento TIMESTAMP,"+
 				"dt_geracao TIMESTAMP,"+
 				"codigo_barras VARCHAR(45),"+
-				"tipo_boleto_id SERIAL,"+
-				"fatura_cartao_id SERIAL,"+
+				"tipo_boleto_id INT,"+
+				"fatura_cartao_id INT,"+
 				"FOREIGN KEY (tipo_boleto_id) REFERENCES tipo_boleto(id),"+
 				"FOREIGN KEY (fatura_cartao_id) REFERENCES fatura_cartao(id)"+
 			");");
 
 			sqls.add("CREATE TABLE IF NOT EXISTS itens_fatura("+
-				"id SERIAL,"+
+				"id INT,"+
 				"descricao VARCHAR(45),"+
-				"fatura_cartao_id SERIAL,"+
+				"fatura_cartao_id INT,"+
 				"FOREIGN KEY (fatura_cartao_id) REFERENCES fatura_cartao(id)"+
 			");");
 			
 			sqls.add("CREATE TABLE IF NOT EXISTS compra("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"valor DOUBLE PRECISION,"+
 				"quantidade_parcela INT,"+
 				"taxa_parcelamento DOUBLE PRECISION,"+
 				"credor VARCHAR(45),"+
 				"data_compra TIMESTAMP,"+
-				"corretor_id SERIAL,"+
-				"cartao_transacao_id SERIAL,"+
+				"corretor_id INT,"+
+				"cartao_transacao_id INT,"+
 				"FOREIGN KEY (corretor_id) REFERENCES corretor(id),"+
 				"FOREIGN KEY (cartao_transacao_id) REFERENCES cartao_transacao(id)"+
 			");");
 
 			sqls.add("CREATE TABLE IF NOT EXISTS pagamento("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"valor_total DOUBLE PRECISION,"+
 				"dt_pagamento TIMESTAMP,"+
 				"valor_parcial DOUBLE PRECISION,"+
-				"boleto_id SERIAL,"+
-				"fatura_cartao_id SERIAL,"+
+				"boleto_id INT,"+
+				"fatura_cartao_id INT,"+
 				"FOREIGN KEY (fatura_cartao_id) REFERENCES fatura_cartao(id),"+
 				"FOREIGN KEY (boleto_id) REFERENCES boleto(id)"+
 			");");
 			
 			sqls.add("CREATE TABLE IF NOT EXISTS movimentacao_cartao("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"dt_movimentacao TIMESTAMP,"+
 				"valor DOUBLE PRECISION,"+
 				"tipo_movimentacao VARCHAR(45),"+
-				"cartao_transacao_id SERIAL,"+
+				"cartao_transacao_id INT,"+
 				"FOREIGN KEY (cartao_transacao_id) REFERENCES cartao_transacao(id)"+
 			");");
 			
 			sqls.add("CREATE TABLE IF NOT EXISTS movimentacao_conta("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"valor DOUBLE PRECISION,"+
 				"dt_movimentacao TIMESTAMP,"+
 				"tipo_movimentacao VARCHAR(7) CHECK (tipo_movimentacao IN ('entrada', 'saida')),"+
-				"conta_id SERIAL,"+
+				"conta_id INT,"+
 				"FOREIGN KEY (conta_id) REFERENCES conta(id)"+
 			");");
 
 			sqls.add("CREATE TABLE IF NOT EXISTS reserva("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"dt_movimentacao TIMESTAMP,"+
 				"tipo_movimentacao VARCHAR(10),"+
-				"conta_id SERIAL,"+
+				"conta_id INT,"+
 				"FOREIGN KEY (conta_id) REFERENCES conta(id)"+
 			");");
 
 			sqls.add("CREATE TABLE IF NOT EXISTS movimentacao_reserva("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"dt_movimentacao TIMESTAMP,"+
 				"valor DOUBLE PRECISION,"+
 				"tipo_movimentacao VARCHAR(7) CHECK (tipo_movimentacao IN ('entrada', 'saida')),"+
-				"reserva_id SERIAL,"+
+				"reserva_id INT,"+
 				"FOREIGN KEY (reserva_id) REFERENCES reserva(id)"+
 			");");
 			
 			sqls.add("CREATE TABLE IF NOT EXISTS cliente("+
-				"id SERIAL PRIMARY KEY,"+
+				"id INT PRIMARY KEY,"+
 				"fator_risco VARCHAR(45),"+
 				"renda_mensal DOUBLE PRECISION,"+
-				"cartao_credito_id SERIAL,"+
-				"pessoa_id SERIAL,"+
+				"cartao_credito_id INT,"+
+				"pessoa_id INT,"+
 				"FOREIGN KEY (cartao_credito_id) REFERENCES cartao_credito(id),"+
 				"FOREIGN KEY (pessoa_id) REFERENCES pessoa(id)"+
 			");");
@@ -238,7 +238,7 @@ public class Application {
 			int id = 0;
 
 			var pessoa = new Pessoa();
-			pessoa.setNome("Gilvania");
+			pessoa.setNome("Nome");
 			pessoa.setId(id);
 			pessoa.setCpf("12345678900");
 
@@ -316,6 +316,8 @@ public class Application {
 			
 			// 6) cliente
 			clienteDAO.insertCliente(0, cliente.getFatorRisco(), cliente.getRendaMensal(), 0);
+			var pessoaDB = contaDAO.findById(0);
+			System.out.println(pessoaDB);
 		};
 	}
 

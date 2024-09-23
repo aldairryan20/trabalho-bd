@@ -10,6 +10,8 @@ public class CartaoCredito {
     private double limiteCredito;
     private BandeiraCartao bandeira;
 
+    public CartaoCredito(){}
+
     public BandeiraCartao getBandeira() {
         return this.bandeira;
     }
