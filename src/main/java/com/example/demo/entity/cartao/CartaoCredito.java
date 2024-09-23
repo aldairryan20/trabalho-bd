@@ -1,10 +1,6 @@
 package com.example.demo.entity.cartao;
 
 import java.sql.Date;
-import java.util.Calendar;
-import java.util.Random;
-
-import com.example.demo.dao.CartaoCreditoDAO;
 
 public class CartaoCredito {
     private int id;
@@ -12,36 +8,14 @@ public class CartaoCredito {
     private int contaId;
     private int catCartaoId;
     private double limiteCredito;
+    private BandeiraCartao bandeira;
 
-    private static CategoriaCartao categoria;
-
-    public static CartaoCredito gerarCartao(int contaId, double limite) {
-        var cartao = new CartaoCredito();
-        cartao.setId(gerarId());
-
-        var calendar = Calendar.getInstance();
-        calendar.setTime(new java.util.Date());
-        calendar.add(Calendar.MONTH, 1);
-        cartao.setDataFechamento(new Date(calendar.getTimeInMillis()));
-
-        cartao.setContaId(contaId);
-
-        categoria = new CategoriaCartao();
-        categoria.setId(cartao.getId());
-        categoria.setDescricao("descricao");
-        cartao.setCatCartaoId(categoria.getId());
-        
-        cartao.setLimiteCredito(limite);
-        return cartao;
+    public BandeiraCartao getBandeira() {
+        return this.bandeira;
     }
 
-    private static int gerarId() {
-        var random = new Random().nextInt(Integer.MAX_VALUE);
-        var ids = CartaoCreditoDAO.ids;
-        if (ids.contains(random)) {
-            return gerarId();
-        }
-        return random;
+    public void setBandeira(BandeiraCartao bandeira) {
+        this.bandeira = bandeira;
     }
 
     public int getId() {

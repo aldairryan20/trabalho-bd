@@ -1,6 +1,9 @@
 package com.example.demo;
 
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -9,10 +12,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 
+import com.example.demo.dao.BandeiraCartaoDAO;
+import com.example.demo.dao.CartaoCreditoDAO;
+import com.example.demo.dao.CategoriaCartaoDAO;
 import com.example.demo.dao.ClienteDAO;
 import com.example.demo.dao.ContaDAO;
 import com.example.demo.dao.PessoaDAO;
 import com.example.demo.dao.TipoContaDAO;
+import com.example.demo.entity.cartao.BandeiraCartao;
+import com.example.demo.entity.cartao.CartaoCredito;
+import com.example.demo.entity.cartao.CategoriaCartao;
+import com.example.demo.entity.conta.Conta;
+import com.example.demo.entity.conta.TipoConta;
+import com.example.demo.entity.pessoa.Pessoa;
 import com.example.demo.entity.pessoa.PessoaFactory;
 import com.example.demo.entity.pessoa.cliente.Cliente;
 import com.example.demo.entity.pessoa.cliente.ClienteFactory;
@@ -29,6 +41,12 @@ public class Application {
 	@Autowired
 	ContaDAO contaDAO;
 	@Autowired
+	BandeiraCartaoDAO bandeiraCartaoDAO;
+	@Autowired
+	CartaoCreditoDAO cartaoCreditoDAO;
+	@Autowired
+	CategoriaCartaoDAO categoriaCartaoDAO;
+	@Autowired
 	TipoContaDAO tipoContaDAO;
 	@Autowired
 	PessoaFactory pessoaFactory;
@@ -41,7 +59,7 @@ public class Application {
 
 	@Bean
 	@Order(1)
-	public CommandLineRunner createTables() {
+	public CommandLineRunner createTables() throws SQLException {
 		var sqls = new ArrayList<String>();
 		return (args) -> {
 
@@ -86,10 +104,12 @@ public class Application {
 			sqls.add("CREATE TABLE IF NOT EXISTS cartao_credito("+
 				"id SERIAL PRIMARY KEY,"+
 				"conta_id SERIAL,"+
+				"bandeira_id SERIAL,"+
 				"categoria_cartao_id SERIAL,"+
 				"dt_fechamento VARCHAR(45),"+
 				"limite_credito DOUBLE PRECISION,"+
 				"FOREIGN KEY (conta_id) REFERENCES conta(id),"+
+				"FOREIGN KEY (bandeira_id) REFERENCES bandeira_cartao(id),"+
 				"FOREIGN KEY (categoria_cartao_id) REFERENCES categoria_cartao(id)"+
 			");");
 
@@ -199,7 +219,9 @@ public class Application {
 				"id SERIAL PRIMARY KEY,"+
 				"fator_risco VARCHAR(45),"+
 				"renda_mensal DOUBLE PRECISION,"+
+				"cartao_credito_id SERIAL,"+
 				"pessoa_id SERIAL,"+
+				"FOREIGN KEY (cartao_credito_id) REFERENCES cartao_credito(id),"+
 				"FOREIGN KEY (pessoa_id) REFERENCES pessoa(id)"+
 			");");
 
@@ -211,34 +233,90 @@ public class Application {
 
 	@Bean
 	@Order(2)
-	public CommandLineRunner criandoCliente() {
-		return (args) -> {
-			
-			//var pessoa = pessoaFactory.createFromResultSet()
-			var cliente = new Cliente();
-		};
-	}
-	@Bean
-	@Order(3)
-	public CommandLineRunner comprandoComCartao() {
+	public CommandLineRunner criandoConta() {
 		return (args) -> {
 			int id = 0;
 
-			//var clienteDB = clienteDAO.findById(id);
+			var pessoa = new Pessoa();
+			pessoa.setNome("Gilvania");
+			pessoa.setId(id);
+			pessoa.setCpf("12345678900");
 
-			//clienteDB.comprar(1000.00);
+			var cliente = new Cliente();
+			cliente.setId(pessoa.getId());
+			cliente.setNome(pessoa.getNome());
+			cliente.setCpf(pessoa.getCpf());
 
-			//var tipoConta = new TipoConta();
-			//var conta = new Conta();
+			cliente.setFatorRisco("Fator risco");
+			cliente.setFaturas(null);
+			cliente.setRendaMensal(10000.0);
 
-			//service.save(pessoa);
-			//service.save(pessoa, conta);
+			var cartao = new CartaoCredito();
+			cartao.setId(id);
+			cartao.setLimiteCredito(10000.0);
 
-			//var contaRec = service.getConta(1);
-			//service.transfer(conta, contaRec);
-//			
-			//service.delete(conta.getId());
-			//service.delete(contaRec.getId());
+			var calendar = Calendar.getInstance();
+			calendar.setTime(new java.util.Date());
+			calendar.add(Calendar.MONTH, 1);
+			cartao.setDataFechamento(new Date(calendar.getTimeInMillis()));
+
+			var bandeira = new BandeiraCartao();
+			bandeira.setId(cartao.getId());
+			bandeira.setDescricao("descricao bandeira");
+
+			cartao.setBandeira(bandeira);
+
+			var catCartao = new CategoriaCartao();
+			catCartao.setDescricao("descricao catCartao");
+			catCartao.setId(cartao.getId());
+
+			cartao.setCatCartaoId(catCartao.getId());
+
+			cartao.setBandeira(bandeira);
+			cliente.setCartao(cartao);
+
+			var conta = new Conta();
+			conta.setCartao(cartao);
+			conta.setId(cliente.getId());
+			conta.setLimiteNegativo(cartao.getLimiteCredito());
+			conta.setSaldo(0);
+
+			cartao.setContaId(conta.getId());
+
+			var tipoConta = new TipoConta();
+			tipoConta.setDescricao("descricao");
+			tipoConta.setId(conta.getId());
+			conta.setTipoContaId(tipoConta.getId());
+
+			clienteDAO.delete(cliente.getId());		// PK - cartao - pessoa
+			cartaoCreditoDAO.delete(cartao.getId());	// PK - conta - bandeira - catCartao.
+			contaDAO.delete(conta.getId());		// PK - tipoConta
+			tipoContaDAO.delete(tipoConta.getId());
+			bandeiraCartaoDAO.delete(bandeira.getId());
+			categoriaCartaoDAO.delete(catCartao.getId());
+			pessoaDAO.delete(pessoa.getId());
+
+			// 1) pessoa
+			pessoaDAO.insertPessoa(pessoa.getCpf(), pessoa.getId(), pessoa.getNome());
+
+			// 2) catCartao
+			categoriaCartaoDAO.insertCategoriaCartao(catCartao.getId(), catCartao.getDescricao());
+
+			// 2) bandeira
+			bandeiraCartaoDAO.insertBandeiraCartao(bandeira.getId(), bandeira.getDescricao());
+
+			// 3) tipoConta
+			tipoContaDAO.insertTipoConta(tipoConta.getId(), tipoConta.getDescricao());
+
+			// 4) conta
+			contaDAO.insertConta(conta.getId(), conta.getSaldo(), conta.getLimiteNegativo(), conta.getTipoContaId());
+
+			// 5) cartao
+			cartaoCreditoDAO.insertCartaoCredito(cartao.getId(), cartao.getDataFechamento(), cartao.getContaId(), cartao.getCatCartaoId(), cartao.getLimiteCredito(), cartao.getBandeira().getId());
+			
+			// 6) cliente
+			clienteDAO.insertCliente(0, cliente.getFatorRisco(), cliente.getRendaMensal(), 0);
 		};
 	}
+
 }

@@ -61,6 +61,8 @@ public class CrudInterfaceImpl<T> implements CrudInterface<T> {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
+        } catch(SQLException e){
+            e.printStackTrace();
         }
     }
 }

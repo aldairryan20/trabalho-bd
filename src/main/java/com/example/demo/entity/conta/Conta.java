@@ -1,6 +1,5 @@
 package com.example.demo.entity.conta;
 import com.example.demo.entity.cartao.CartaoCredito;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class Conta {
     private int id;
@@ -8,7 +7,6 @@ public class Conta {
     private double limiteNegativo;
     private int tipoContaId;
 
-    @JsonIgnoreProperties
     private CartaoCredito cartao;
     
     void pagar(double valor) {

@@ -10,26 +10,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.config.SpringJdbcConfig;
-import com.example.demo.entity.conta.TipoConta;
-import com.example.demo.entity.conta.TipoContaFactory;
+import com.example.demo.entity.cartao.CategoriaCartao;
 import com.example.demo.interfaces.CrudInterfaceImpl;
 
 @Component
-public class TipoContaDAO extends CrudInterfaceImpl<TipoConta> {
-    private final TipoContaFactory factory;
+public class CategoriaCartaoDAO extends CrudInterfaceImpl<CategoriaCartao> {
 
-    public TipoContaDAO(TipoContaFactory factory) {
-        super("tipo_conta");
-        this.factory = factory;
+    public CategoriaCartaoDAO() {
+        super("categoria_cartao");
     }
 
     @Override
-    public TipoConta createElementFromResultSet(ResultSet rs) throws SQLException {
-        return factory.createFromResultSet(rs);
+    public CategoriaCartao createElementFromResultSet(ResultSet rs) throws SQLException {
+        CategoriaCartao categoriaCartao = new CategoriaCartao();
+        categoriaCartao.setId(rs.getInt("id"));
+        categoriaCartao.setDescricao(rs.getString("descricao"));
+        return categoriaCartao;
     }
 
-    public void insertTipoConta(int id, String descricao) {
-        var sql = "INSERT INTO tipo_conta(id, descricao) VALUES (?, ?)";
+    public void insertCategoriaCartao(int id, String descricao) {
+        var sql = "INSERT INTO categoria_cartao (id, descricao) VALUES (?, ?)";
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -41,8 +41,8 @@ public class TipoContaDAO extends CrudInterfaceImpl<TipoConta> {
         }
     }
 
-    public ResponseEntity<String> update(String descricao, int id) {
-        var sql = "UPDATE tipo_conta SET descricao = ? WHERE id = ?";
+    public ResponseEntity<String> updateCategoriaCartao(int id, String descricao) {
+        var sql = "UPDATE categoria_cartao SET descricao = ? WHERE id = ?";
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -52,13 +52,11 @@ public class TipoContaDAO extends CrudInterfaceImpl<TipoConta> {
             if (rowsAffected > 0) {
                 return ResponseEntity.ok("updated");
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("not found - "+ id);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("not found - " + id);
             }
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity<>("Error at update", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
-    
 }

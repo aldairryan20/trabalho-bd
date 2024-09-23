@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -12,15 +11,12 @@ import org.springframework.stereotype.Component;
 import com.example.demo.config.SpringJdbcConfig;
 import com.example.demo.entity.conta.Conta;
 import com.example.demo.entity.conta.ContaFactory;
-import com.example.demo.entity.conta.TipoConta;
 import com.example.demo.interfaces.CrudInterfaceImpl;
 
 import java.sql.SQLException;
 
 @Component
 public class ContaDAO extends CrudInterfaceImpl<Conta> {
-    @Autowired
-    private TipoContaDAO tipoContaDAO;
     private final ContaFactory contaFactory;
 
     public ContaDAO(ContaFactory factory) {
@@ -38,10 +34,6 @@ public class ContaDAO extends CrudInterfaceImpl<Conta> {
         var sql = "INSERT INTO conta(id, saldo, limite_negativo, tipo_conta_id) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
-            var tipoConta = new TipoConta();
-            tipoConta.setId(tipoContaId);
-            tipoConta.setDescricao("Conta teste");
-            tipoContaDAO.insertTipoConta(tipoConta.getId(), tipoConta.getDescricao());
 
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
@@ -75,11 +67,5 @@ public class ContaDAO extends CrudInterfaceImpl<Conta> {
             return new ResponseEntity<>("Error at update", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @Override
-    public void delete(int id) throws SQLException{
-        super.delete(id);
-        tipoContaDAO.delete(id);
-    }
-
+    
 }

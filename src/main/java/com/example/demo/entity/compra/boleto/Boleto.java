@@ -1,9 +1,8 @@
 package com.example.demo.entity.compra.boleto;
-import java.util.Calendar;
+
 import java.util.Date;
 import java.util.Random;
 
-import com.example.demo.dao.BoletoDAO;
 
 public class Boleto {
     private int id;
@@ -18,41 +17,6 @@ public class Boleto {
 
     public Boleto() {
         this.setPago(false);
-    }
-
-    public static Boleto gerarBoleto(double valor) {
-        var boleto = new Boleto();
-        Calendar calendar = Calendar.getInstance();
-        var codigoBarras = generateEAN13();
-        var id = gerarId();
-        var tipoBoleto = new TipoBoleto();
-
-        tipoBoleto.setId(id);
-        var ids = BoletoDAO.ids;
-        ids.add(id);
-        
-        tipoBoleto.setDescricao("descricao");
-
-        boleto.setCodigoBarras(codigoBarras);
-        boleto.setDataGeracao(calendar.getTime());
-
-        calendar.add(Calendar.MONTH, 1);
-        boleto.setDataVencimento(calendar.getTime());
-
-        boleto.setFaturaCartaoId(id);
-        boleto.setId(id);
-        boleto.setTipoBoletoId(id);
-
-        boleto.setValor(valor);
-        return boleto;
-    }
-    public static int gerarId() {
-        var id = new Random().nextInt(Integer.MAX_VALUE);
-        var ids = BoletoDAO.ids;
-        if (ids.contains(id)){
-            return gerarId();
-        }
-        return id;
     }
 
     public static void pagarBoleto(Boleto boleto, String codigoBarras) {

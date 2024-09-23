@@ -32,7 +32,7 @@ public class ClienteDAO extends CrudInterfaceImpl<Cliente> {
     }
 
     public void insertCliente(int id, String fatorRisco, double rendaMensal, int cartaoId) {
-        var sql = "INSERT INTO cliente (id, fator_risco, renda_mensal, cartao_id) VALUES (?, ?, ?, ?)";
+        var sql = "INSERT INTO cliente (id, fator_risco, renda_mensal, cartao_credito_id) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -47,7 +47,7 @@ public class ClienteDAO extends CrudInterfaceImpl<Cliente> {
     }
 
     public ResponseEntity<String> updateCliente(int id, String fatorRisco, double rendaMensal, int cartaoId) {
-        var sql = "UPDATE cliente SET fator_risco = ?, renda_mensal = ?, cartao_id = ? WHERE id = ?";
+        var sql = "UPDATE cliente SET fator_risco = ?, renda_mensal = ?, cartao_credito_id = ? WHERE id = ?";
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);

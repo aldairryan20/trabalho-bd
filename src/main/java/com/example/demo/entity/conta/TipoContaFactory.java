@@ -9,7 +9,6 @@ import com.example.demo.interfaces.EntityFactory;
 
 @Component
 public class TipoContaFactory implements EntityFactory<TipoConta> {
-    @SuppressWarnings("unused")
     @Override
     public TipoConta createFromResultSet(ResultSet rs) throws SQLException {
         var tipoConta = new TipoConta();
