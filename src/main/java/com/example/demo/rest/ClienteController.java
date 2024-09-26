@@ -9,6 +9,7 @@ import com.example.demo.dao.ClienteDAO;
 import com.example.demo.entity.pessoa.cliente.Cliente;
 import com.example.demo.entity.compra.fatura.ItensFatura;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,6 +17,8 @@ import java.util.List;
 public class ClienteController {
     @Autowired
     private ClienteDAO clienteDAO;
+
+    ArrayList<Cliente> clientes = clienteDAO.findAll();
 
     @GetMapping("/clientes")
     public ResponseEntity<List<Cliente>> findAll() {
@@ -35,6 +38,7 @@ public class ClienteController {
     @RequestMapping(value = "/clientes", method = RequestMethod.POST)
     public ResponseEntity<Cliente> insertCliente(@RequestBody Cliente cliente) {
         clienteDAO.insertCliente(cliente.getId(), cliente.getFatorRisco(), cliente.getRendaMensal(), cliente.getCartao().getId());
+        clientes.add(cliente);
         return new ResponseEntity<>(cliente, HttpStatus.CREATED);
     }
 
@@ -48,6 +52,7 @@ public class ClienteController {
     public ResponseEntity<String> delete(@PathVariable int id) {
         try {
             clienteDAO.delete(id);
+            clientes.remove(id);
             var responseBody = "deleted";
             return new ResponseEntity<>(responseBody, HttpStatus.OK);
         } catch (Exception e) {

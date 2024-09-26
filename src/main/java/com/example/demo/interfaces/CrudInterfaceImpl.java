@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 
 import com.example.demo.config.SpringJdbcConfig;
@@ -17,8 +16,8 @@ public class CrudInterfaceImpl<T> implements CrudInterface<T> {
     }
 
     @Override
-    public List<T> findAll() {
-        List<T> elements = new ArrayList<>();
+    public ArrayList<T> findAll() {
+        var elements = new ArrayList<T>();
 
         try (Connection conn = SpringJdbcConfig.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + tableName + ";");

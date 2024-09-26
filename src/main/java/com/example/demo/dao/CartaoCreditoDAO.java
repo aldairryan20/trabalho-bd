@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,39 +67,5 @@ public class CartaoCreditoDAO extends CrudInterfaceImpl<CartaoCredito> {
             e.printStackTrace();
             return new ResponseEntity<>("Error at update", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    public List<CartaoCredito> findAll() {
-        var sql = "SELECT * FROM cartao_credito";
-        List<CartaoCredito> cartoes = new ArrayList<>();
-
-        try (Connection conn = SpringJdbcConfig.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                CartaoCredito cartao = createElementFromResultSet(rs);
-                cartoes.add(cartao);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return cartoes;
-    }
-
-    public CartaoCredito findById(int id) {
-        var sql = "SELECT * FROM cartao_credito WHERE id = ?";
-        CartaoCredito cartao = null;
-
-        try (Connection conn = SpringJdbcConfig.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                cartao = createElementFromResultSet(rs);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return cartao;
     }
 }
