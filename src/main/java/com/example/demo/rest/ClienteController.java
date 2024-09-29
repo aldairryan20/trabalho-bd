@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dao.ClienteDAO;
 import com.example.demo.entity.pessoa.cliente.Cliente;
+import com.example.demo.rest.exception.NotFoundException;
 import com.example.demo.entity.compra.fatura.ItensFatura;
 
 import java.util.ArrayList;
@@ -17,26 +18,29 @@ import java.util.List;
 public class ClienteController {
     @Autowired
     private ClienteDAO clienteDAO;
-
-    ArrayList<Cliente> clientes = clienteDAO.findAll();
+    
+    public ClienteController(ClienteDAO clienteDAO) {
+        this.clienteDAO = clienteDAO;
+    }
 
     @GetMapping("/clientes")
     public ResponseEntity<List<Cliente>> findAll() {
-        var clientes = clienteDAO.findAll();
-        return ResponseEntity.ok(clientes);
+        return ResponseEntity.ok(clienteDAO.findAll());
     }
 
     @RequestMapping(value = "/clientes/{id}", method = RequestMethod.GET)
     public ResponseEntity<Cliente> findById(@PathVariable int id) {
-        var cliente = clienteDAO.findById(id);
-        if (cliente == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        ArrayList<Cliente> clientes = clienteDAO.findAll();
+        if (id >= clientes.size() || id < 0) {
+            throw new NotFoundException("Cliente not found - "+id);
         }
+        var cliente = clienteDAO.findById(id);
         return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/clientes", method = RequestMethod.POST)
     public ResponseEntity<Cliente> insertCliente(@RequestBody Cliente cliente) {
+        ArrayList<Cliente> clientes = clienteDAO.findAll();
         clienteDAO.insertCliente(cliente.getId(), cliente.getFatorRisco(), cliente.getRendaMensal(), cliente.getCartao().getId());
         clientes.add(cliente);
         return new ResponseEntity<>(cliente, HttpStatus.CREATED);
@@ -52,7 +56,6 @@ public class ClienteController {
     public ResponseEntity<String> delete(@PathVariable int id) {
         try {
             clienteDAO.delete(id);
-            clientes.remove(id);
             var responseBody = "deleted";
             return new ResponseEntity<>(responseBody, HttpStatus.OK);
         } catch (Exception e) {

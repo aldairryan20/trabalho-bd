@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +14,7 @@ import com.example.demo.config.SpringJdbcConfig;
 import com.example.demo.entity.cartao.CartaoCredito;
 import com.example.demo.entity.cartao.CartaoCreditoFactory;
 import com.example.demo.interfaces.CrudInterfaceImpl;
+import com.example.demo.rest.exception.NotFoundException;
 
 @Component
 public class CartaoCreditoDAO extends CrudInterfaceImpl<CartaoCredito> {
@@ -61,7 +61,7 @@ public class CartaoCreditoDAO extends CrudInterfaceImpl<CartaoCredito> {
             if (rowsAffected > 0) {
                 return ResponseEntity.ok("updated");
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("not found - " + id);
+                throw new NotFoundException(getClass().getName()+": Could not found - "+id);
             }
         } catch (SQLException e) {
             e.printStackTrace();

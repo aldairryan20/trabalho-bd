@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dao.PessoaDAO;
 import com.example.demo.entity.pessoa.Pessoa;
+import com.example.demo.rest.exception.NotFoundException;
 
 @RestController
 @RequestMapping("/api")
@@ -31,8 +32,8 @@ public class PessoaController {
     @RequestMapping(value = "/pessoas/{id}", method = RequestMethod.GET)
     public ResponseEntity<Pessoa> findById(@PathVariable int id) {
         var pessoa = pessoaDAO.findById(id);
-        if (pessoa == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (pessoa == null || pessoa.getId() < 0) {
+            throw new NotFoundException(pessoa.getClass().getName()+" not found - "+id);
         }
         return new ResponseEntity<>(pessoa, HttpStatus.FOUND);
     }

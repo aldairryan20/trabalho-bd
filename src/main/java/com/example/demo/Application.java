@@ -48,6 +48,7 @@ public class Application {
 	CategoriaCartaoDAO categoriaCartaoDAO;
 	@Autowired
 	TipoContaDAO tipoContaDAO;
+	
 	@Autowired
 	PessoaFactory pessoaFactory;
 	@Autowired
@@ -283,57 +284,68 @@ public class Application {
 
 			cartao.setContaId(conta.getId());
 			cliente.setCartao(cartao);
+			cliente.setConta(conta);
 
 			var tipoConta = new TipoConta();
 			tipoConta.setDescricao("descricao");
 			tipoConta.setId(conta.getId());
 			conta.setTipoContaId(tipoConta.getId());
 
-			// clienteDAO.delete(cliente.getId());		// PK - cartao - pessoa
-			// cartaoCreditoDAO.delete(cartao.getId());	// PK - conta - bandeira - catCartao.
-			// contaDAO.delete(conta.getId());		// PK - tipoConta
-			// tipoContaDAO.delete(tipoConta.getId());
-			// bandeiraCartaoDAO.delete(bandeira.getId());
-			// categoriaCartaoDAO.delete(catCartao.getId());
-			// pessoaDAO.delete(pessoa.getId());
+			clienteDAO.delete(cliente.getId());		// PK - cartao - pessoa
+			cartaoCreditoDAO.delete(cartao.getId());	// PK - conta - bandeira - catCartao.
+			contaDAO.delete(conta.getId());		// PK - tipoConta
+			tipoContaDAO.delete(tipoConta.getId());
+			bandeiraCartaoDAO.delete(bandeira.getId());
+			categoriaCartaoDAO.delete(catCartao.getId());
+			pessoaDAO.delete(pessoa.getId());
 
 			// 1) pessoa
 			pessoaDAO.insertPessoa(pessoa.getCpf(), pessoa.getId(), pessoa.getNome());
-
+			System.out.println(pessoa);
 			// 2) catCartao
 			categoriaCartaoDAO.insertCategoriaCartao(catCartao.getId(), catCartao.getDescricao());
-
+			System.out.println("\n"+catCartao);
 			// 2) bandeira
 			bandeiraCartaoDAO.insertBandeiraCartao(bandeira.getId(), bandeira.getDescricao());
-
+			System.out.println("\n"+bandeira);
 			// 3) tipoConta
 			tipoContaDAO.insertTipoConta(tipoConta.getId(), tipoConta.getDescricao());
-
+			System.out.println("\n"+tipoConta);
 			// 4) conta
 			contaDAO.insertConta(conta.getId(), conta.getSaldo(), conta.getLimiteNegativo(), conta.getTipoContaId());
-
+			System.out.println("\n"+conta);
 			// 5) cartao
 			cartaoCreditoDAO.insertCartaoCredito(cartao.getId(), cartao.getDataFechamento(), cartao.getContaId(), cartao.getCatCartaoId(), cartao.getLimiteCredito(), cartao.getBandeira().getId());
-			
+			System.out.println("\n"+cartao);
 			// 6) cliente
 			clienteDAO.insertCliente(0, cliente.getFatorRisco(), cliente.getRendaMensal(), cliente.getCartao().getId());
-			
+			System.out.println("\n"+cliente);
 		};
 	}
 	@Bean
 	@Order(3)
 	public CommandLineRunner comprandoComCartao() {
 		return args -> {
-			var cliente = clienteDAO.findById(0);
-			cliente.loadFaturas();
-			var cartao = cartaoCreditoDAO.findById(0);
+			int id = 1;
+			var pessoaDB = pessoaDAO.findById(id);
+			var clienteDB = clienteDAO.findById(id);
 
-			System.out.println(cliente);
+			clienteDB.setPessoa(pessoaDB);
+			clienteDB.loadFaturas();
 
-			cliente.setCartao(cartao);
-			cliente.comprar(5123);
-			cliente.comprar(5123);
-			
+			var cartaoBD = cartaoCreditoDAO.findById(id);
+			var bandeiraDB = bandeiraCartaoDAO.findById(id);
+
+			cartaoBD.setBandeira(bandeiraDB);
+
+			clienteDB.setCartao(cartaoBD);
+
+			System.out.println("\n"+clienteDB);
+
+			clienteDB.comprarComCartao(5123.0,0);
+			clienteDB.comprarComCartao(51,0);
+
+			System.out.println(clienteDB);
 		};
 	}
 

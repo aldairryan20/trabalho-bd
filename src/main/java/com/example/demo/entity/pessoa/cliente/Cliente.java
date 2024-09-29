@@ -2,7 +2,7 @@ package com.example.demo.entity.pessoa.cliente;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 import com.example.demo.dao.BoletoDAO;
 import com.example.demo.entity.cartao.CartaoCredito;
@@ -11,6 +11,13 @@ import com.example.demo.entity.compra.fatura.FaturaCartao;
 import com.example.demo.entity.conta.Conta;
 import com.example.demo.entity.pessoa.Pessoa;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Setter
+@Getter
+@ToString
 public class Cliente extends Pessoa {
     private String fatorRisco;
     private double rendaMensal;
@@ -18,80 +25,60 @@ public class Cliente extends Pessoa {
     private Conta conta;
     private ArrayList<FaturaCartao> faturas;
 
+    BoletoDAO boletoDAO;
+
     public void loadFaturas() {
         faturas = new ArrayList<FaturaCartao>();
         System.out.println("faturas disponiveis");
     }
 
-    public Conta getConta() {
-        return this.conta;
-    }
-
-    public void setConta(Conta conta) {
-        this.conta = conta;
-    }
-    
-
-    public CartaoCredito getCartao() {
-        return this.cartao;
-    }
-
-    public void setCartao(CartaoCredito cartao) {
-        this.cartao = cartao;
-    }
-
-    public String getFatorRisco() {
-        return this.fatorRisco;
-    }
-
-    public void setFatorRisco(String fatorRisco) {
-        this.fatorRisco = fatorRisco;
-    }
-
-    public double getRendaMensal() {
-        return this.rendaMensal;
-    }
-
-    public void setRendaMensal(double rendaMensal) {
-        this.rendaMensal = rendaMensal;
-    }
-
-    public List<FaturaCartao> getFaturas() {
-        return faturas;
-    }
-
-    public void setFaturas(ArrayList<FaturaCartao> faturas) {
-        this.faturas = faturas;
-    }
-
-    public Pagamento pagarBoleto(BoletoDAO boletoDAO, String codigo_barras) {
+    public Optional<Pagamento> pagarBoletoUsandoConta(String codigo_barras) {
+        var saldo = conta.getSaldo();
         var boleto = boletoDAO.getBoleto(codigo_barras);
+        var valor = boleto.getValor();
+
+        if(saldo < valor) {
+            System.out.println("Compra recusada");
+            return Optional.empty();
+        }
+
+        var dtPagamento = new Date(System.currentTimeMillis());
         var pagamento = new Pagamento();
 
-        pagamento.setValorTotal(boleto.getValor());
-        pagamento.setDataPagamento(new Date(System.currentTimeMillis()));
-        pagamento.setFaturaCartaoId(getFaturaAtual().getId());
-        cartao.setLimiteCredito(cartao.getLimiteCredito() - boleto.getValor());
+        pagamento.setValorTotal(valor);
+        pagamento.setDataPagamento(dtPagamento);
+        pagamento.setValorTotal(valor);
+        pagamento.setValorParcial(valor);
 
-        return pagamento;
+        conta.setSaldo(saldo -= valor);
+
+        return Optional.of(pagamento);
     }
 
-    public Pagamento comprar(double valor) {
-        System.out.println(getNome() + " está comprando algo no valor de: R$" + valor);
-        var limite = cartao.getLimiteCredito();
-        cartao.setLimiteCredito(limite - valor);
+    public Optional<Pagamento> comprarComCartao(double valor, double taxa) {
+        var limiteCartao = getCartao().getLimiteCredito();
+        var total = valor + valor * taxa;
+
+        System.out.println(getNome() + " está comprando algo no valor de: R$" + total);
+        if (limiteCartao < total){
+            System.out.println("Compra recusada");
+            return Optional.empty();
+        }
+
+        cartao.setLimiteCredito(limiteCartao - total);
 
         // Criar um novo pagamento
-        Pagamento pagamento = new Pagamento();
-        pagamento.setValorTotal(valor);
+        var pagamento = new Pagamento();
+        pagamento.setValorTotal(total);
         pagamento.setDataPagamento(new Date(System.currentTimeMillis()));
+        
         pagamento.setFaturaCartaoId(getFaturaAtual().getId());
 
         // Adicionar o valor à fatura atual
         FaturaCartao faturaAtual = getFaturaAtual();
-        faturaAtual.setValor(faturaAtual.getValor() + valor);
+        faturaAtual.setValor(faturaAtual.getValor() + total);
 
-        return pagamento;
+        return Optional.of(pagamento);
     }
 
     public FaturaCartao getFaturaAtual() {
@@ -117,12 +104,9 @@ public class Cliente extends Pessoa {
         return getFaturaAtual().getValor();
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", fatorRisco='" + getFatorRisco() + "'" +
-            ", rendaMensal='" + getRendaMensal() + "'" +
-            "}";
+    public void setPessoa(Pessoa pessoa) {
+        setNome(pessoa.getNome());
+        setCpf(pessoa.getCpf());
+        setId(pessoa.getId());
     }
 }
